@@ -1,7 +1,7 @@
 ### notitas.dev
 
 #### Demo
-https://notitas-dev.vercel.app
+https://notitas.dev
 
 #### Context
 
