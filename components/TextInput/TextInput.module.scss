@@ -1,0 +1,13 @@
+.text-input {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 24px;
+  font-weight: bold;
+  padding: 16px;
+  margin-right: 8px;
+  border: 0;
+  outline: none;
+
+  &::placeholder {
+    font-weight: normal;
+  }
+}
