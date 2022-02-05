@@ -6,6 +6,7 @@
   border-radius: 8px;
   height: 80px;
   font-size: 24px;
+  text-transform: capitalize;
 }
 
 .todo-trash {
@@ -14,7 +15,7 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  font-size: 16px;
+  font-size: 10px;
   font-family: sans-serif;
   cursor: pointer;
   margin-left: auto;

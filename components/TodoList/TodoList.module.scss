@@ -1,0 +1,37 @@
+.todo-list {
+  margin: 0 auto;
+  max-width: 500px;
+}
+
+.author {
+  margin: 48px auto;
+
+  & > h1 {
+    pointer-events: none;
+    font-size: 56px;
+    color: crimson;
+  }
+
+  & > p {
+    pointer-events: none;
+  }
+}
+
+.author-name {
+  pointer-events: all;
+
+  &:hover {
+    text-decoration: line-through;
+  }
+}
+
+.form {
+  display: grid;
+  justify-content: start;
+  box-sizing: border-box;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  padding: 48px;
+  width: 100%;
+}
