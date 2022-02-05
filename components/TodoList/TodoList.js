@@ -6,6 +6,10 @@ import Button from '../Button';
 import TodoItem from '../TodoItem';
 import TextInput from '../TextInput';
 
+import { containerVariants, itemVariants } from './animations';
+
+import styles from './TodoList.module.scss';
+
 const INITIAL_ITEMS = [
   {
     id: 'qwer',
@@ -19,32 +23,38 @@ const INITIAL_ITEMS = [
   }
 ];
 
-export default function TodoList({ props }) {
-  const itemTitleRef = useRef(null);
-  const [todoList, setTodoList] = useState(INITIAL_ITEMS || []);
+const TodoList = () => {
+  const inputRef = useRef(null);
+  const [todoList, setTodoList] = useState(INITIAL_ITEMS); // @TO-DO: use /notes endpoint
 
   useEffect(() => {
-    itemTitleRef.current.focus()
-  }, [])
+    inputRef.current.focus()
+  }, [todoList])
 
-  const addTodoItem = () => {
-    const title = itemTitleRef?.current.value;
-    const uniqueId = `${title}${Date.now()}`;
+  const formValidations = {
+    isNoteLongEnough: () => inputRef.current.value.length > 0
+  }
+
+  const addTodoItem = e => {
+    const inputValue = inputRef.current.value;
+    const uniqueId = `${inputValue}#${Date.now()}`;
 
     const dateNow = new Date();
     // const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
-    if (title.length > 0) {
+    if (formValidations.isNoteLongEnough()) {
       setTodoList([
         ...todoList,
         {
           id: uniqueId,
-          title,
+          title: inputValue,
           isCompleted: false,
           creationDate: dateNow.toLocaleDateString()
         }
       ])
-      itemTitleRef.current.value = '';
+      inputRef.current.value = '';
+    } else {
+      // trigger input validation feedback component
     }
   }
 
@@ -54,38 +64,55 @@ export default function TodoList({ props }) {
   }
 
   const handleKeyPress = event => {
+    // @TO-DO: Implement keyboard navigation/shortcuts (arrows + del)
     if (event.key === 'Enter') {
       addTodoItem();
     }
   }
 
   return (
-    <div style={{ margin: '0 auto', maxWidth: '600px' }}>
-
-      <div style={{ margin: '48px auto' }}>
-        <h1 style={{ fontSize: 48 }}>notitas.dev</h1>
+    <div className={styles['todo-list']}>
+      <div className={styles['author']}>
+        <h1>notitas.dev</h1>
         <p>
-          made with ☕ by <a href="https://nikoto.dev" target="_blank" rel="noreferrer">nikoto</a>
+          made with ☕ by{' '}
+          <a
+            href="https://nikoto.dev"
+            target="_blank"
+            rel="noreferrer"
+            className={styles['author-name']}
+          >
+            nikoto
+          </a>
         </p>
       </div>
 
       <AnimatePresence presenceAffectsLayout>
-        {todoList.map(item => (
-          <TodoItem
-            id={item.id}
-            key={item.id}
-            title={item.title}
-            creationDate={item.creationDate}
-            isCompleted={item.isCompleted}
-            onRemove={removeTodoItem}
-          />
-        ))}
-
         <motion.div
-          layout
-          style={{ display: 'grid', justifyContent: 'center' }}
+          variants={containerVariants}
+          initial="entering"
+          animate="active"
+          exit="exiting"
         >
-          <TextInput nodeRef={itemTitleRef} onKeyPress={handleKeyPress} placeholder="Escribe aquí.." />
+          {todoList.map(item => (
+            <TodoItem
+              id={item.id}
+              key={item.id}
+              title={item.title}
+              creationDate={item.creationDate}
+              isCompleted={item.isCompleted}
+              onRemove={removeTodoItem}
+              animationVariants={itemVariants}
+            />
+          ))}
+        </motion.div>
+
+        <motion.div layout className={styles['form']}>
+          <TextInput
+            nodeRef={inputRef}
+            onKeyPress={handleKeyPress}
+            placeholder="Escribe aquí.."
+          />
           <Button onClick={addTodoItem} title="Añadir nota (Enter)" />
         </motion.div>
       </AnimatePresence>
@@ -103,3 +130,5 @@ export async function getServerSideProps(context) {
     }
   }
 }
+
+export default TodoList;
