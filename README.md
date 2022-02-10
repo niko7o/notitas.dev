@@ -16,4 +16,4 @@ Small kata to practice with `framer-motion` in the train to Oviedo
 - Dark mode
 - Mobile-friendly
 - Multi columns?
-- Validation feedback "title required"
+- Validation feedback "title required" ✅
