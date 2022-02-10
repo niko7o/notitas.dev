@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Button from '../Button';
 import TodoItem from '../TodoItem';
 import TextInput from '../TextInput';
+import FormNoteError from '../FormNoteError';
 
 import { containerVariants, itemVariants } from './animations';
 
@@ -27,6 +28,7 @@ const TodoList = () => {
   const inputRef = useRef(null);
   const [todoList, setTodoList] = useState(INITIAL_ITEMS); // @TO-DO: use /notes endpoint
   const [hasError, setHasError] = useState(false);
+  const [errorCount, setErrorCount] = useState(0);
 
   useEffect(() => {
     inputRef.current.focus()
@@ -56,6 +58,7 @@ const TodoList = () => {
       inputRef.current.value = '';
     } else {
       showErrorForSeconds(3);
+      setErrorCount(errorCount + 1)
     }
   }
 
@@ -115,27 +118,15 @@ const TodoList = () => {
           ))}
         </motion.div>
 
-        <AnimatePresence>
           <motion.div layout className={styles['form']}>
             <TextInput
               nodeRef={inputRef}
               onKeyPress={handleKeyPress}
               placeholder="Escribe aquí.."
             />
-            
             <Button onClick={addTodoItem} title="Añadir nota (Enter)" /> 
-            
-            {hasError && (
-              <motion.span
-                initial={{ marginTop: '10px', opacity: 0, y: -20, color: 'crimson' }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 20 }}
-              >
-                Pero escribe algo, cabesa!
-              </motion.span>
-            )}
+            {hasError && <FormNoteError errorCount={errorCount}/>}
         </motion.div>
-        </AnimatePresence>
       </AnimatePresence>
     </div>
   );
