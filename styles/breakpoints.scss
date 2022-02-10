@@ -1,0 +1,18 @@
+$breakpoints: (
+  'tablet':  768px,
+  'laptop': 1024px,
+  'desktop': 1280px,
+  'wide': 1440px
+) !default;
+
+@mixin from($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    @media (min-width: #{inspect(map-get($breakpoints, $breakpoint))}) {
+      @content;
+    }
+  }
+  @else {
+    @warn "No breakpoints found for `#{$breakpoint}`. "
+        + "Breakpoints are: #{map-keys($breakpoints)}.";
+  }
+}
