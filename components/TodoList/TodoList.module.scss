@@ -3,7 +3,12 @@
 
 .todo-list {
   margin: 0 auto;
-  max-width: 600px;
+  
+  @include from('tablet') {
+    margin-left: 60px;
+    width: 50%;
+    max-width: 600px;
+  }
 }
 
 .author {
@@ -16,8 +21,12 @@
 
   & > h1 {
     pointer-events: none;
-    font-size: 56px;
     color: $blue;
+    font-size: 36px;
+
+    @include from('tablet') {
+      font-size: 56px;
+    }
   }
 
   & > p {
