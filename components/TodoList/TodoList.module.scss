@@ -1,15 +1,23 @@
+@import '../../styles/color-palette.scss';
+@import '../../styles/breakpoints.scss';
+
 .todo-list {
   margin: 0 auto;
-  max-width: 500px;
+  max-width: 600px;
 }
 
 .author {
   margin: 48px auto;
+  text-align: center;
+
+  @include from('tablet') {
+    text-align: left;
+  }
 
   & > h1 {
     pointer-events: none;
     font-size: 56px;
-    color: crimson;
+    color: $blue;
   }
 
   & > p {
