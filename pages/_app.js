@@ -1,5 +1,4 @@
 import '../styles/globals.scss'
-import '../styles/breakpoints.scss'
 
 function MyApp({ Component, pageProps }) {
   return <Component {...pageProps} />
