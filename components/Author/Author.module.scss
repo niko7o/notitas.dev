@@ -1,0 +1,23 @@
+@import '../../styles/color-palette.scss';
+@import '../../styles/breakpoints.scss';
+
+.author {
+  position: fixed;
+  bottom: 12px;
+  right: 24px;
+  font-size: 14px;
+  pointer-events: none;
+
+  @include from('tablet') {
+    font-size: 12px;
+    bottom: 16px;
+  }
+}
+
+.author-name {
+  pointer-events: all;
+
+  &:hover {
+    text-decoration: line-through;
+  }
+}

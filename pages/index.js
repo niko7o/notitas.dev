@@ -12,6 +12,7 @@ const Home = () => (
       <meta property="og:description" content="Tus notitas en todas partes" key="description" />
       <meta name="author" content="nikoto" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-H76FYP6CS0"></script>
     </Head>
     <TodoList />
   </>

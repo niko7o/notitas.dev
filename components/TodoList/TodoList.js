@@ -1,32 +1,22 @@
 import { useState, useRef, useEffect } from 'react';
-
 import { motion, AnimatePresence } from 'framer-motion';
+
+import { sendEvent } from '../../utils/google-analytics';
 
 import Button from '../Button';
 import TodoItem from '../TodoItem';
 import TextInput from '../TextInput';
 import FormNoteError from '../FormNoteError';
+import Author from '../Author';
 
 import { containerVariants, itemVariants } from './animations';
 
 import styles from './TodoList.module.scss';
 
-const INITIAL_ITEMS = [
-  {
-    id: 'qwer',
-    title: 'Kodak ColorPlus',
-    isCompleted: false
-  },
-  {
-    id: 'asdf',
-    title: 'Fujifilm CK40',
-    isCompleted: true
-  }
-];
-
-const TodoList = () => {
+const TodoList = props => {
+  console.log('props', props)
   const inputRef = useRef(null);
-  const [todoList, setTodoList] = useState(INITIAL_ITEMS); // @TO-DO: use /notes endpoint
+  const [todoList, setTodoList] = useState([]); // @TO-DO: use /notes endpoint
   const [hasError, setHasError] = useState(false);
   const [errorCount, setErrorCount] = useState(0);
 
@@ -38,12 +28,10 @@ const TodoList = () => {
     isNoteLongEnough: () => inputRef.current.value.length > 0
   }
 
-  const addTodoItem = e => {
+  const addTodoItem = () => {
     const inputValue = inputRef.current.value;
     const uniqueId = `${inputValue}#${Date.now()}`;
-
     const dateNow = new Date();
-    // const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
     if (formValidations.isNoteLongEnough()) {
       setTodoList([
@@ -52,13 +40,15 @@ const TodoList = () => {
           id: uniqueId,
           title: inputValue,
           isCompleted: false,
-          creationDate: dateNow.toLocaleDateString()
+          creationDate: dateNow
         }
       ])
       inputRef.current.value = '';
+      sendEvent({ category: 'TodoList', label: 'addTodoItem', value: 'Success'})
     } else {
       showErrorForSeconds(3);
       setErrorCount(errorCount + 1)
+      sendEvent({ category: 'TodoList', label: 'addTodoItem', value: 'Error'})
     }
   }
 
@@ -83,23 +73,9 @@ const TodoList = () => {
 
   return (
     <div className={styles['todo-list']}>
-      <div className={styles['author']}>
-        <h1>notitas.dev</h1>
-        <p>
-          made with ☕ by{' '}
-          <a
-            href="https://nikoto.dev"
-            target="_blank"
-            rel="noreferrer"
-            className={styles['author-name']}
-          >
-            nikoto
-          </a>
-        </p>
-      </div>
-
-      <AnimatePresence presenceAffectsLayout>
+      <AnimatePresence>
         <motion.div
+          key="todoContainer"
           variants={containerVariants}
           initial="entering"
           animate="active"
@@ -118,22 +94,23 @@ const TodoList = () => {
           ))}
         </motion.div>
 
-          <motion.div layout className={styles['form']}>
-            <TextInput
-              nodeRef={inputRef}
-              onKeyPress={handleKeyPress}
-              placeholder="Escribe aquí.."
-            />
-            <Button onClick={addTodoItem} title="Añadir nota (Enter)" /> 
-            {hasError && <FormNoteError errorCount={errorCount}/>}
+        <motion.div key="todoFormInput" layout className={styles['form']}>
+          <TextInput
+            nodeRef={inputRef}
+            onKeyPress={handleKeyPress}
+            placeholder="Escribe aquí.."
+          />
+          <Button onClick={addTodoItem} title="Añadir nota (Enter)" /> 
+          {hasError && <FormNoteError errorCount={errorCount}/>}
         </motion.div>
       </AnimatePresence>
+      <Author />
     </div>
   );
 }
 
 export async function getServerSideProps(context) {
-  const res = await fetch(`${BASE_URL}/api/notes`)
+  const res = await fetch(`http://localhost:3000/api/notes`)
   const notes = await res.json()
 
   return {

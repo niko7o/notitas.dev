@@ -9,9 +9,19 @@ export default function TodoItem({
   title,
   animationVariants,
   creationDate,
-  isCompleted,
   onRemove
 }) {
+  const dateOptions = { 
+    weekday: 'long', 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+  };
+
+  const getFormattedDate = () => {
+    return creationDate.toLocaleDateString('es-ES', dateOptions)
+  }
+
   return (
     <motion.div
       layout
@@ -20,6 +30,9 @@ export default function TodoItem({
       variants={animationVariants}
     >
       <span>{title}</span>
+      <span className={styles.date}>
+        {getFormattedDate()}
+      </span>
       <motion.div
         className={styles['delete']}
         whileHover={hoverAnimation}
