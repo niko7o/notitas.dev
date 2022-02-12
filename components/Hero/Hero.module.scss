@@ -1,0 +1,38 @@
+@import '../../styles/breakpoints.scss';
+
+.hero {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+  flex-wrap: wrap;
+
+  @include from('tablet') {
+    flex-wrap: nowrap;
+  }
+}
+
+.hero-list {
+  flex-basis: 100%;
+  order: 2;
+
+  @include from('tablet') {
+    order: 1;
+    flex-basis: 50%;
+  }
+}
+
+.hero-illustration {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-basis: 100%;
+  order: 1;
+  padding: 24px;
+
+  @include from('tablet') {
+    order: 2;
+    flex-basis: 50%;
+    align-items: center;
+  }
+}

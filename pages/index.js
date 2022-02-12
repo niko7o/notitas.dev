@@ -1,6 +1,6 @@
 import Head from 'next/head'
 
-import TodoList from '../components/TodoList';
+import Hero from '../components/Hero';
 
 const Home = () => (
   <>
@@ -14,7 +14,7 @@ const Home = () => (
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <script async src="https://www.googletagmanager.com/gtag/js?id=G-H76FYP6CS0"></script>
     </Head>
-    <TodoList />
+    <Hero />
   </>
 )
 

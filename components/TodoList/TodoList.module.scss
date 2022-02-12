@@ -6,7 +6,7 @@
   
   @include from('tablet') {
     margin-left: 60px;
-    width: 50%;
+    margin-right: 24px;
     max-width: 600px;
   }
 }
