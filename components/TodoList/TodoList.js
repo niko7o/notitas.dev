@@ -13,9 +13,11 @@ import { containerVariants, itemVariants } from './animations';
 
 import styles from './TodoList.module.scss';
 
+const LOCAL_STORAGE_KEY = 'notitasDevTodos'
+
 const TodoList = props => {
-  console.log('props', props)
   const inputRef = useRef(null);
+  
   const [todoList, setTodoList] = useState([]); // @TO-DO: use /notes endpoint
   const [hasError, setHasError] = useState(false);
   const [errorCount, setErrorCount] = useState(0);
@@ -24,25 +26,32 @@ const TodoList = props => {
     inputRef.current.focus()
   }, [todoList])
 
+  useEffect(() => {
+    const localTodos = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (localTodos?.length > 0) {
+      setTodoList(JSON.parse(localTodos))
+    }
+  }, [])
+
   const formValidations = {
     isNoteLongEnough: () => inputRef.current.value.length > 0
   }
 
   const addTodoItem = () => {
     const inputValue = inputRef.current.value;
-    const uniqueId = `${inputValue}#${Date.now()}`;
-    const dateNow = new Date();
+    const uniqueId = `${inputValue[0]}#${Date.now()}`;
+    const date = new Date();
+
+    const newTodo = {
+      id: uniqueId,
+      title: inputValue,
+      isCompleted: false,
+      creationDate: date
+    }
 
     if (formValidations.isNoteLongEnough()) {
-      setTodoList([
-        ...todoList,
-        {
-          id: uniqueId,
-          title: inputValue,
-          isCompleted: false,
-          creationDate: dateNow
-        }
-      ])
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify([...todoList, newTodo ]));
+      setTodoList([...todoList, newTodo ]);
       inputRef.current.value = '';
       sendEvent({ category: 'TodoList', label: 'addTodoItem', value: 'Success'})
     } else {
@@ -53,8 +62,9 @@ const TodoList = props => {
   }
 
   const removeTodoItem = idToRemove => {
-    const newTodos = todoList.filter(item => item.id !== idToRemove)
-    setTodoList(newTodos);
+    const filteredTodos = todoList.filter(item => item.id !== idToRemove)
+    setTodoList(filteredTodos);
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(filteredTodos));
   }
 
   const handleKeyPress = event => {
