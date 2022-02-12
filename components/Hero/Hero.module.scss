@@ -1,3 +1,4 @@
+@import '../../styles/color-palette.scss';
 @import '../../styles/breakpoints.scss';
 
 .hero {
@@ -12,7 +13,7 @@
   }
 }
 
-.hero-list {
+.hero-left {
   flex-basis: 100%;
   order: 2;
 
@@ -22,17 +23,37 @@
   }
 }
 
-.hero-illustration {
+.hero-right {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: flex-start;
   flex-basis: 100%;
   order: 1;
   padding: 24px;
 
+  h1 {
+    color: $purple;
+    font-size: 52px;
+    line-height: 1;
+    max-width: 15ch;
+    pointer-events: none;
+    &:focus {
+      outline: none;
+    }
+  }
+
   @include from('tablet') {
     order: 2;
     flex-basis: 50%;
     align-items: center;
+  }
+}
+
+.hero-image {
+  display: none;
+  @include from('tablet') {
+    display: block;
+    margin-top: 50px;
   }
 }

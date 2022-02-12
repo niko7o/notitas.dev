@@ -2,10 +2,10 @@
 @import '../../styles/breakpoints.scss';
 
 .todo-list {
-  margin: 80px auto 0;
+  margin: 10vh auto 0;
   
   @include from('tablet') {
-    margin-left: 60px;
+    margin-left: 50px;
     margin-right: 24px;
     max-width: 600px;
   }
