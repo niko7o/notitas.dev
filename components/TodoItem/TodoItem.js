@@ -4,13 +4,13 @@ import styles from './TodoItem.module.scss';
 
 import { hoverAnimation } from './animations';
 
-export default function TodoItem({ 
+const TodoItem = ({ 
   id,
   title,
   animationVariants,
   creationDate,
   onRemove
-}) {
+}) => {
   const dateOptions = { 
     weekday: 'long', 
     year: 'numeric', 
@@ -47,3 +47,5 @@ export default function TodoItem({
     </motion.div>
   );
 }
+
+export default TodoItem;

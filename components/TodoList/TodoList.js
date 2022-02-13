@@ -9,31 +9,39 @@ import TextInput from '../TextInput';
 import FormNoteError from '../FormNoteError';
 import Author from '../Author';
 
+import Modal from '../Modal';
+
+import { useModalHandle } from '../../utils/hooks';
+
+import { LOCAL_STORAGE_KEY } from '../../utils/constants';
+
 import { containerVariants, itemVariants } from './animations';
 
 import styles from './TodoList.module.scss';
 
-const LOCAL_STORAGE_KEY = 'notitasDevTodos'
-
-const TodoList = props => {
+const TodoList = () => {
   const inputRef = useRef(null);
+  const itemRef = useRef(null);
   
   const [todoList, setTodoList] = useState([]); // @TO-DO: use /notes endpoint
   const [hasError, setHasError] = useState(false);
   const [errorCount, setErrorCount] = useState(0);
 
-  useEffect(() => {
-    inputRef.current.focus()
-  }, [todoList])
+  const { isModalOpen, openModal, closeModal } = useModalHandle();
 
   useEffect(() => {
     const localTodos = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (localTodos?.length > 0) {
       setTodoList(JSON.parse(localTodos))
     }
+    openModal();
   }, [])
 
-  const formValidations = {
+  useEffect(() => {
+    inputRef.current.focus()
+  }, [todoList])
+
+  const FORM_VALIDATIONS = {
     isNoteLongEnough: () => inputRef.current.value.length > 0
   }
 
@@ -49,7 +57,9 @@ const TodoList = props => {
       creationDate: date
     }
 
-    if (formValidations.isNoteLongEnough()) {
+    const formValidationsPassed = FORM_VALIDATIONS.isNoteLongEnough();
+
+    if (formValidationsPassed) {
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify([...todoList, newTodo ]));
       setTodoList([...todoList, newTodo ]);
       inputRef.current.value = '';
@@ -91,7 +101,7 @@ const TodoList = props => {
           animate="active"
           exit="exiting"
         >
-          {todoList.map(item => (
+          {todoList.length > 0 && todoList.map(item => (
             <TodoItem
               id={item.id}
               key={item.id}
@@ -114,7 +124,19 @@ const TodoList = props => {
           {hasError && <FormNoteError errorCount={errorCount}/>}
         </motion.div>
       </AnimatePresence>
+      
       <Author />
+      
+      {/* <AnimatePresence>
+        {isModalOpen && (
+          <Modal key="animatedModal" closeModal={closeModal}>
+            <p>lorem ipsum dolor sit amet</p>
+            <button onClick={closeModal}>
+              Close
+            </button>
+          </Modal>
+        )}
+      </AnimatePresence> */}
     </div>
   );
 }
