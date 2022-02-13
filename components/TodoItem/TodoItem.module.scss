@@ -1,8 +1,9 @@
+@import '../../styles/breakpoints.scss';
 @import '../../styles/color-palette.scss';
 
 .todo {
   display: flex;
-  padding: 28px;
+  padding: 10px;
   padding-left: 48px;
   align-items: center;
   margin-bottom: 16px;
@@ -10,8 +11,12 @@
   font-size: 20px;
   text-transform: capitalize;
 
-  &:nth-child(odd) {
-    background-color: $light-gray;
+  &:nth-last-child(1) {
+    margin-bottom: 0;
+  }
+
+  @include from('desktop') {
+    padding: 20px;
   }
 }
 
@@ -30,7 +35,8 @@
   font-size: 10px;
   font-family: sans-serif;
   cursor: pointer;
-  margin-left: 16px;
+  // margin-left: 16px;
+  margin-left: auto;
   color: #ab865a;
   background-color: #ffc67f;
 }
