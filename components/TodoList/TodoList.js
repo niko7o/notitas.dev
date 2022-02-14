@@ -63,11 +63,11 @@ const TodoList = () => {
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify([...todoList, newTodo ]));
       setTodoList([...todoList, newTodo ]);
       inputRef.current.value = '';
-      sendEvent({ category: 'TodoList', label: 'addTodoItem', value: 'Success'})
+      sendEvent({ category: 'TodoItem', label: 'Add', value: 'Success'})
     } else {
       showErrorForSeconds(3);
       setErrorCount(errorCount + 1)
-      sendEvent({ category: 'TodoList', label: 'addTodoItem', value: 'Error'})
+      sendEvent({ category: 'TodoItem', label: 'Add', value: 'Error'})
     }
   }
 
@@ -75,6 +75,7 @@ const TodoList = () => {
     const filteredTodos = todoList.filter(item => item.id !== idToRemove)
     setTodoList(filteredTodos);
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(filteredTodos));
+    sendEvent({ category: 'TodoItem', label: 'Remove', value: 'Success'})
   }
 
   const handleKeyPress = event => {

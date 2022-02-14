@@ -32,12 +32,18 @@
 
   h1 {
     color: $purple;
-    font-size: 52px;
+    font-size: 36px;
     line-height: 1;
-    max-width: 15ch;
+    max-width: 20ch;
     pointer-events: none;
+    margin-bottom: 24px;
+
     &:focus {
       outline: none;
+    }
+
+    @include from('tablet') {
+      font-size: 52px;
     }
   }
 
