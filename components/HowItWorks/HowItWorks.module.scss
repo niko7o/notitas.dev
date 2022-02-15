@@ -8,11 +8,15 @@
   a { 
     color: blue;
   }
+
+  p {
+    margin: 32px 0;
+  }
 }
 
 .close {
   $size: 48px;
-  $offset: $size/2;
+  $offset: $size / 2;
 
   position: absolute;
   display: grid;
