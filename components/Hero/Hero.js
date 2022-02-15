@@ -29,7 +29,7 @@ const Hero = () => {
         <h1>Tu bloc de notitas, más rápido que nadie 🚀</h1>
         <div className={styles['hero-image']}>
           <Image
-            src="/notes.svg"
+            src="/notes2.svg"
             width={600}
             height={400}
             quality={100}
