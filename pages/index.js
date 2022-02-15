@@ -5,7 +5,7 @@ import Hero from '../components/Hero';
 const Home = () => (
   <>
     <Head>
-      <title>notitas.dev</title>
+      <title>notitas.dev | Bloc de notitas ⚡</title>
       <meta name="description" content="Tus notitas en todas partes" />
       <meta name="keywords" content="notitas, notitas.dev, notes, notas" />
       <meta property="og:title" content="notitas.dev" key="title" />
