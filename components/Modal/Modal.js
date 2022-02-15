@@ -8,7 +8,7 @@ import { entering, idle, exiting, customTransition } from './animations';
 
 import styles from './Modal.module.scss'
 
-const Modal = ({ children, closeModal }) => {
+const Modal = ({ children, closeModal, isCloseButtonShown }) => {
   const modalRef = useRef(null);
   const { mousePosition } = useMousePosition();
   const { x: cursorX, y: cursorY } = mousePosition;
@@ -51,6 +51,7 @@ const Modal = ({ children, closeModal }) => {
       ref={modalRef}
     >
       {children}
+      {isCloseButtonShown && <button onClick={closeModal}>x</button>}
     </motion.div>
   )
 }
