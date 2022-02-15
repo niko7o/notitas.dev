@@ -18,8 +18,7 @@ const HowItWorks = ({ isCloseButtonShown }) => (
     <p>
       <strong>Disclaimer</strong>: si cambias de dispositivo o limpias las cookies de tu navegador, perderás
       todas las notitas que tengas almacenadas hasta el momento. Por favor, ten esto en
-      cuenta para no tener sorpresas! (quizás en un futuro se habiliten un sistema de
-      guardado de notas con encriptación.)
+      cuenta para no tener sorpresas!
     </p>
 
     <p>

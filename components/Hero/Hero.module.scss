@@ -22,13 +22,17 @@
 }
 
 .hero-right {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  flex-basis: 100%;
-  order: 1;
-  padding: 24px;
+  display: none;
+
+  @include from('desktop') {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    flex-basis: 100%;
+    order: 1;
+    padding: 24px;
+  }
 
   h1 {
     color: $purple;
@@ -68,6 +72,7 @@
   right: 24px;
   font-size: 12px;
   cursor: pointer;
+  
   &:hover {
     text-decoration: underline;
   }

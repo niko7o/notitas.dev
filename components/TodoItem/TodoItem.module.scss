@@ -9,7 +9,6 @@
   margin-bottom: 16px;
   border-radius: 100px;
   font-size: 20px;
-  text-transform: capitalize;
 
   &:nth-last-child(1) {
     margin-bottom: 0;
@@ -39,4 +38,5 @@
   margin-left: auto;
   color: #ab865a;
   background-color: #ffc67f;
+  flex-shrink: 0;
 }

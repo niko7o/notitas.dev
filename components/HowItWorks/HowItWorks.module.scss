@@ -3,20 +3,29 @@
 
 .how-it-works {
   position: relative;
-  padding: 10%;
+  padding: 0 24px;
+  
+  @include from('tablet') {
+    padding: 10%;
+  }
   
   a { 
-    color: blue;
+    color: $blue;
+    &:hover {
+      text-decoration: underline;
+    }
   }
 
   p {
-    margin: 32px 0;
+    @include from('tablet') {
+      margin: 32px 0;
+    }
   }
 }
 
 .close {
   $size: 48px;
-  $offset: $size / 2;
+  $offset: calc($size / 2);
 
   position: absolute;
   display: grid;

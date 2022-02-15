@@ -1,13 +1,15 @@
+@import '../../styles/breakpoints.scss';
 @import '../../styles/color-palette.scss';
 
+$MODAL_Z_INDEX: 1000;
+
 .modal {
-  width: 768px;
-  height: 70vh;
+  width: 90%;
+  min-height: 70vh;
+  height: max-content;  
   background-color: white;
-  border-radius: 16px;
-  box-shadow: 0px 0px 1000px rgba(0, 0, 0, 0.2);
   position: fixed;
-  z-index: 1000;
+  z-index: $MODAL_Z_INDEX;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -17,13 +19,31 @@
   bottom: 0;
   left: 0;
   margin: auto;
-  
+
+  @include from('tablet') {
+    width: 768px;
+    min-height: unset;
+  }
 
   p {
     margin: 16px;
   }
 
   button {
+    cursor: pointer;
+  }
+}
+
+.modal-overlay {
+  z-index: $MODAL_Z_INDEX - 1;
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0,0,0,0.35);
+  
+  &:hover {
     cursor: pointer;
   }
 }
