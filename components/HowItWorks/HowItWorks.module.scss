@@ -1,0 +1,26 @@
+@import '../../styles/color-palette.scss';
+@import '../../styles/breakpoints.scss';
+
+.how-it-works {
+  position: relative;
+  padding: 10%;
+  
+  a { 
+    color: blue;
+  }
+}
+
+.close {
+  $size: 48px;
+  $offset: $size/2;
+
+  position: absolute;
+  display: grid;
+  place-content: center;
+  width: $size;
+  height: $size;
+  top: -($size) + $offset;
+  right: -($size) + $offset;
+  background-color: $beige;
+  border-radius: 50%;
+}
