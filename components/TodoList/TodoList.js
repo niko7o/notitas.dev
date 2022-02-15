@@ -7,11 +7,6 @@ import Button from '../Button';
 import TodoItem from '../TodoItem';
 import TextInput from '../TextInput';
 import FormNoteError from '../FormNoteError';
-import Author from '../Author';
-
-import Modal from '../Modal';
-
-import { useModalHandle } from '../../utils/hooks';
 
 import { LOCAL_STORAGE_KEY } from '../../utils/constants';
 
@@ -21,20 +16,17 @@ import styles from './TodoList.module.scss';
 
 const TodoList = () => {
   const inputRef = useRef(null);
-  const itemRef = useRef(null);
+  const itemRef = useRef(null); // @TO-DO: implement scrollTo() after item is added
   
   const [todoList, setTodoList] = useState([]); // @TO-DO: use /notes endpoint
   const [hasError, setHasError] = useState(false);
   const [errorCount, setErrorCount] = useState(0);
-
-  const { isModalOpen, openModal, closeModal } = useModalHandle();
 
   useEffect(() => {
     const localTodos = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (localTodos?.length > 0) {
       setTodoList(JSON.parse(localTodos))
     }
-    openModal();
   }, [])
 
   useEffect(() => {
@@ -125,19 +117,6 @@ const TodoList = () => {
           {hasError && <FormNoteError errorCount={errorCount}/>}
         </motion.div>
       </AnimatePresence>
-      
-      <Author />
-      
-      {/* <AnimatePresence>
-        {isModalOpen && (
-          <Modal key="animatedModal" closeModal={closeModal}>
-            <p>lorem ipsum dolor sit amet</p>
-            <button onClick={closeModal}>
-              Close
-            </button>
-          </Modal>
-        )}
-      </AnimatePresence> */}
     </div>
   );
 }
