@@ -1,5 +1,5 @@
 {
-  "name": "kf-storefront",
+  "name": "notitas",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -8,11 +8,13 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "framer-motion": "^6.2.4",
+    "framer-motion": "6.2.4",
     "next": "12.0.10",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "sass": "^1.49.7"
+    "react-icons": "^4.4.0",
+    "sass": "1.49.7",
+    "uuidv4": "^6.2.13"
   },
   "devDependencies": {
     "eslint": "8.8.0",
