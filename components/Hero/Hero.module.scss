@@ -1,35 +1,32 @@
-@import '../../styles/color-palette.scss';
-@import '../../styles/breakpoints.scss';
+@import "../../styles/color-palette.scss";
+@import "../../styles/breakpoints.scss";
 
 .hero {
   display: flex;
   justify-content: center;
   width: 100%;
   height: 100vh;
+  overflow: hidden;
   flex-wrap: wrap;
+  background-color: $cleanBlue;
 
-  @include from('tablet') {
+  @include from("tablet") {
     flex-wrap: nowrap;
   }
 }
 
 .hero-left {
-  flex-basis: 100%;;
-
-  @include from('tablet') {
-    flex-basis: 50%;
-  }
+  width: 100%;
 }
 
 .hero-right {
   display: none;
 
-  @include from('desktop') {
+  @include from("desktop") {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    flex-basis: 100%;
     order: 1;
     padding: 24px;
   }
@@ -46,12 +43,12 @@
       outline: none;
     }
 
-    @include from('tablet') {
+    @include from("tablet") {
       font-size: 52px;
     }
   }
 
-  @include from('tablet') {
+  @include from("tablet") {
     order: 2;
     flex-basis: 50%;
     align-items: center;
@@ -60,7 +57,7 @@
 
 .hero-image {
   display: none;
-  @include from('tablet') {
+  @include from("tablet") {
     display: block;
     margin-top: 50px;
   }
@@ -72,7 +69,8 @@
   right: 24px;
   font-size: 12px;
   cursor: pointer;
-  
+  transition: 0.3 ease all;
+
   &:hover {
     text-decoration: underline;
   }
