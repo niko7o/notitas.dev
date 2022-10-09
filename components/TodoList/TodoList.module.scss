@@ -1,20 +1,40 @@
-@import '../../styles/color-palette.scss';
-@import '../../styles/breakpoints.scss';
+@import "../../styles/color-palette.scss";
+@import "../../styles/breakpoints.scss";
 
 .todo-list {
+  display: flex;
   padding: 16px;
-  overflow-y: auto;
+  overflow: hidden;
   min-height: 100vh;
   margin-top: 32px;
-  
-  @include from('tablet') {
-    margin-left: 50px;
-    margin-right: 24px;
-    margin: 10vh auto 0;
-    max-width: 600px;
-    min-height: unset;
-    height: 60vh;
+  align-items: flex-start;
+  justify-content: flex-start;
+  align-content: flex-start;
+  flex-direction: column;
+
+  ul {
+    padding: 0;
   }
+  @include from("tablet") {
+    overflow: auto;
+    margin: 10vh 0 0 5vh;
+    min-height: unset;
+    max-height: 100%;
+  }
+}
+
+.todo-list-container {
+  gap: 10px;
+  display: flex;
+  flex-flow: row wrap;
+  max-height: 100%;
+  width: 100%;
+  overflow: auto;
+  align-content: flex-start;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
 }
 
 .form {
@@ -22,8 +42,9 @@
   justify-content: start;
   box-sizing: border-box;
   position: fixed;
-  bottom: 0;
-  left: 0;
-  padding: 48px;
-  width: 100%;
+  background-color: white;
+  border-radius: 20px;
+  bottom: 50px;
+  left: 50px;
+  padding: 10px;
 }
