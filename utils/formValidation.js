@@ -1,3 +1,3 @@
 export const FORM_VALIDATIONS = {
-  isNoteLongEnough: (val) => val > 0,
+  isNotEmpty: (val) => val > 0,
 };

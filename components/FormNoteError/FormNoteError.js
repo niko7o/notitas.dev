@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-const ERROR_COPIES = {
+export const ERROR_COPIES = {
   1: "Pero escribe algo, cabesa! 🤔",
   2: "¿Quieres escribir?",
   3: "Poeta de la familia... no eres.",
@@ -9,14 +9,14 @@ const ERROR_COPIES = {
   6: "Ummm...",
 };
 
-const FormNoteError = ({ errorCount }) => (
+const FormNoteError = ({ errorCount, hasError }) => (
   <motion.span
     layout
     initial={{ marginTop: "10px", opacity: 0, y: -20, color: "crimson" }}
     animate={{ opacity: 1, y: 0 }}
     exit={{ opacity: 0, y: 20 }}
   >
-    {ERROR_COPIES[errorCount] || "Necesitas ayuda? 🤔"}
+    {hasError && (ERROR_COPIES[errorCount] || "Necesitas ayuda? 🤔")}
   </motion.span>
 );
 

@@ -9,13 +9,19 @@
   gap: 10px;
   flex-wrap: wrap;
   align-content: center;
-  justify-content: flex-start;
   align-items: center;
   margin: 5px 0 20px 0;
+  height: 30px;
+  justify-content: center;
+  @include from("desktop") {
+    justify-content: flex-start;
+  }
 }
 .active {
   background-color: $purple;
   color: #fff;
+  height: 100%;
+
   border-radius: 10px;
   padding: 5px 10px;
   cursor: pointer;
@@ -23,6 +29,21 @@
 .inactive {
   background-color: #fff;
   border-radius: 10px;
+  height: 100%;
+
   padding: 5px 10px;
   cursor: pointer;
+}
+.addButton {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  border-radius: 10px;
+  padding: 5px 10px;
+  color: black;
+  cursor: pointer;
+  &:hover {
+    background-color: $purple;
+    color: white;
+  }
 }

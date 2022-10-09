@@ -1,24 +1,26 @@
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
-
-import Button from "../Button";
+import Button from "../Inputs/Button/Buton";
 import TodoItem from "../TodoItem";
 import TextInput from "../Inputs/TextInput";
 import SelectInput from "../Inputs/SelectInput";
-
 import FormNoteError from "../FormNoteError";
-
+import { updateLocalStorage } from "../../utils/storage/updateLocalStorage";
+import { getLocalStorage } from "../../utils/storage/getLocalStorage";
 import { LOCAL_STORAGE_KEY } from "../../utils/constants";
-
 import { itemVariants } from "./animations";
 import styles from "./TodoList.module.scss";
 import Categories from "./Categories/Categories";
+import { removeTodoItem } from "../../utils/managingNotes";
+import { FORM_VALIDATIONS } from "../../utils/formValidation";
+import FormTodo from "../FormTodo/FormTodo";
 
 const TodoList = () => {
-  const [actualCategory, setActualCategory] = useState("Todas");
+  // State
   const titleRef = useRef(null);
   const descriptionRef = useRef(null);
   const categoryRef = useRef(null);
+  const [actualCategory, setActualCategory] = useState("Todas");
 
   const [todoList, setTodoList] = useState([
     {
@@ -40,21 +42,13 @@ const TodoList = () => {
   const [hasError, setHasError] = useState(false);
   const [errorCount, setErrorCount] = useState(0);
 
+  // get the todoList from localstorage everytime the web is opened
   useEffect(() => {
-    const localNotes = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
-    if (localNotes) {
-      setTodoList(localNotes);
-    }
+    const localNotes = getLocalStorage(LOCAL_STORAGE_KEY);
+    localNotes && setTodoList(localNotes);
   }, []);
 
   // Take the focus event on change notes array
-  useEffect(() => {
-    titleRef.current.focus();
-  }, [todoList]);
-
-  const FORM_VALIDATIONS = {
-    isNoteLongEnough: () => titleRef.current.value.length > 0,
-  };
 
   const addTodoItem = () => {
     const inputValue = titleRef.current.value;
@@ -72,7 +66,9 @@ const TodoList = () => {
       creationDate: date,
     };
 
-    const formValidationsPassed = FORM_VALIDATIONS.isNoteLongEnough();
+    const formValidationsPassed = FORM_VALIDATIONS.isNotEmpty(
+      titleRef.current.value.length
+    );
     if (formValidationsPassed) {
       //if the category is not in the list, add it to the todoList and localstorage
       if (!categoriesAbailable.includes(category)) {
@@ -112,37 +108,6 @@ const TodoList = () => {
     }
   };
 
-  const removeTodoItem = (idToRemove) => {
-    // we need to delete the note from the category and localstorage
-    const newTodoList = todoList.map((category) => {
-      return {
-        ...category,
-        content: category.content.filter((note) => note.id !== idToRemove),
-      };
-    });
-
-    //if its category is empty, it is deleted unless is the "Todas" category
-    const newTodoListFiltered = newTodoList.filter(
-      (category) => category.content.length > 0 || category.title === "Todas"
-    );
-    //if some category got deleted, the actual category is set to "Todas"
-    if (newTodoListFiltered.length < newTodoList.length) {
-      setActualCategory("Todas");
-    }
-
-    setTodoList(newTodoListFiltered);
-    localStorage.setItem(
-      LOCAL_STORAGE_KEY,
-      JSON.stringify(newTodoListFiltered)
-    );
-  };
-
-  const handleKeyPress = (event) => {
-    if (event.key === "Enter") {
-      addTodoItem();
-    }
-  };
-
   const showErrorForSeconds = (seconds) => {
     setHasError(true);
     setTimeout(() => {
@@ -154,8 +119,10 @@ const TodoList = () => {
     <div className={styles["todo-list"]}>
       <div className={styles["todo-list__header"]}>
         <h1 className={styles["todo-list__title"]}>
-          Notitas en {actualCategory}
+          Notitas{" "}
+          {actualCategory !== "Todas" && <span>en {actualCategory}</span>}
         </h1>
+
         <Categories
           todoList={todoList}
           setTodoList={setTodoList}
@@ -164,30 +131,25 @@ const TodoList = () => {
           actualCategory={actualCategory}
         />
       </div>
-      <motion.div
-        className={styles["todo-list-container"]}
-        key="todoContainer"
-        initial="entering"
-        exit="exiting"
-      >
+      <motion.div className={styles["todo-list-container"]}>
         {allNotitas.length === 0
           ? ""
           : actualCategory === "Todas"
           ? allNotitas.map((todo) => {
               return (
-                <div key={todo.id}>
-                  <>
-                    <TodoItem
-                      id={todo.id}
-                      title={todo.title}
-                      description={todo.description}
-                      creationDate={todo.creationDate}
-                      isCompleted={todo.isCompleted}
-                      onRemove={removeTodoItem}
-                      animationVariants={itemVariants}
-                    />
-                  </>
-                </div>
+                <TodoItem
+                  key={todo.id}
+                  id={todo.id}
+                  title={todo.title}
+                  description={todo.description}
+                  creationDate={todo.creationDate}
+                  isCompleted={todo.isCompleted}
+                  animationVariants={itemVariants}
+                  todoList={todoList}
+                  actualCategory={actualCategory}
+                  setActualCategory={setActualCategory}
+                  setTodoList={setTodoList}
+                />
               );
             })
           : //show the notes of the category selected
@@ -196,39 +158,34 @@ const TodoList = () => {
               .map((category) => {
                 return category.content.map((todo) => {
                   return (
-                    <div key={todo.id}>
-                      <>
-                        <TodoItem
-                          id={todo.id}
-                          title={todo.title}
-                          description={todo.description}
-                          creationDate={todo.creationDate}
-                          isCompleted={todo.isCompleted}
-                          onRemove={removeTodoItem}
-                          animationVariants={itemVariants}
-                        />
-                      </>
-                    </div>
+                    <TodoItem
+                      id={todo.id}
+                      title={todo.title}
+                      description={todo.description}
+                      creationDate={todo.creationDate}
+                      isCompleted={todo.isCompleted}
+                      animationVariants={itemVariants}
+                      todoList={todoList}
+                      actualCategory={actualCategory}
+                      setActualCategory={setActualCategory}
+                      setTodoList={setTodoList}
+                    />
                   );
                 });
               })}
       </motion.div>
-      <motion.div key="todoFormInput" layout className={styles["form"]}>
-        <TextInput
-          nodeRef={titleRef}
-          onKeyPress={handleKeyPress}
-          placeholder="Título"
-        />
-        <TextInput
-          nodeRef={descriptionRef}
-          onKeyPress={handleKeyPress}
-          placeholder="Descripción (opcional)"
-        />
-        <SelectInput nodeRef={categoryRef} categories={categoriesAbailable} />
-
-        <Button onClick={addTodoItem} title="Añadir nota (Enter)" />
-        {hasError && <FormNoteError errorCount={errorCount} />}
-      </motion.div>
+      <FormTodo
+        nodetitleRef={titleRef}
+        nodeDescriptionRef={descriptionRef}
+        categoryRef={categoryRef}
+        addTodoItem={addTodoItem}
+        categoriesAbailable={categoriesAbailable}
+        hasError={hasError}
+        setHasError={setHasError}
+        errorCount={errorCount}
+        setErrorCount={setErrorCount}
+        todoList={todoList}
+      />
     </div>
   );
 };

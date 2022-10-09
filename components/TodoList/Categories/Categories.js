@@ -1,6 +1,8 @@
 import styles from "./Categories.module.scss";
 import { AiOutlinePlus } from "react-icons/ai";
-
+// import { LOCAL_STORAGE_KEY } from "../../../utils/constants";
+// import Swal from "sweetalert2";
+import { handleNewCategory } from "../../../utils/managingCategories";
 export default function Categories({
   setActualCategory,
   actualCategory,
@@ -8,23 +10,6 @@ export default function Categories({
   setTodoList,
   todoList,
 }) {
-  const handleNewCategory = () => {
-    const newCategory = prompt("Ingrese el nombre de la nueva categoria");
-    if (newCategory) {
-      const newTodoList = [
-        ...todoList,
-        {
-          title: newCategory,
-          content: [],
-        },
-      ];
-      setActualCategory(newCategory);
-      setTodoList(newTodoList);
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newTodoList));
-    }
-  };
-  //if a category is empty, it is deleted
-
   return (
     <div className={styles.container}>
       {categoriesAbailable.map((category) => (
@@ -40,7 +25,14 @@ export default function Categories({
           {category}
         </p>
       ))}
-      <AiOutlinePlus onClick={handleNewCategory} />
+      <div
+        className={styles.addButton}
+        onClick={() =>
+          handleNewCategory(setActualCategory, setTodoList, todoList)
+        }
+      >
+        <AiOutlinePlus />
+      </div>
     </div>
   );
 }

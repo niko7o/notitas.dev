@@ -1,0 +1,21 @@
+@import "../../styles/color-palette.scss";
+@import "../../styles/breakpoints.scss";
+
+.form {
+  display: grid;
+  justify-content: start;
+  box-sizing: border-box;
+  position: fixed;
+  background-color: rgba($color: $white, $alpha: 90%);
+  opacity: 0.9;
+  backdrop-filter: blur(7px);
+  border-radius: 20px;
+  bottom: 50px;
+  width: 300px;
+  left: calc(50% - 150px);
+  padding: 10px;
+
+  @include from("desktop") {
+    left: 50px;
+  }
+}
