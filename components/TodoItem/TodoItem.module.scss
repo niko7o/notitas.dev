@@ -1,28 +1,27 @@
-@import '../../styles/breakpoints.scss';
-@import '../../styles/color-palette.scss';
+@import "../../styles/breakpoints.scss";
+@import "../../styles/color-palette.scss";
 
 .todo {
+  list-style: none;
+  background-color: $normalBLue;
+  color: black;
   display: flex;
-  padding: 10px;
-  padding-left: 48px;
+  min-width: 200px;
+  padding: 10px 10px 10px 20px;
+  width: 100%;
+  gap: 10px;
+  flex: 1 1 auto;
   align-items: center;
-  margin-bottom: 16px;
-  border-radius: 100px;
+  border-radius: 20px;
   font-size: 20px;
 
-  &:nth-last-child(1) {
-    margin-bottom: 0;
-  }
-
-  @include from('desktop') {
+  @include from("desktop") {
     padding: 20px;
   }
 }
 
-.date {
-  font-size: 10px;
-  text-transform: uppercase;
-  margin-left: auto;
+.description {
+  word-break: break-word;
 }
 
 .delete {
@@ -34,9 +33,13 @@
   font-size: 10px;
   font-family: sans-serif;
   cursor: pointer;
-  // margin-left: 16px;
+  margin-left: 16px;
   margin-left: auto;
-  color: #ab865a;
-  background-color: #ffc67f;
+  background-color: $purple;
+  color: white;
   flex-shrink: 0;
+  &:hover {
+    background-color: $accentBlue;
+    scale: 1.1;
+  }
 }
