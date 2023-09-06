@@ -1,26 +1,28 @@
-import { motion } from 'framer-motion';
+import { useState, useRef } from "react";
 
-import styles from './TodoItem.module.scss';
+import { motion } from "framer-motion";
 
-import { hoverAnimation } from './animations';
+import Pill from "../Pill";
 
-const TodoItem = ({ 
-  id,
-  title,
-  animationVariants,
-  creationDate,
-  onRemove
-}) => {
-  const dateOptions = { 
-    weekday: 'long', 
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric' 
+import styles from "./TodoItem.module.scss";
+
+import { hoverAnimation } from "./animations";
+
+const TodoItem = ({ id, title, animationVariants, onRemove, onEditSave }) => {
+  const itemRef = useRef({});
+  const [todoText, setTodoText] = useState(title);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const handleClickEdit = () => {
+    itemRef.current.focus();
+    if (isEditing) {
+      setIsEditing(false);
+    } else {
+      setIsEditing(true);
+    }
+    console.log(itemRef.current);
+    onEditSave({ id, title: todoText });
   };
-
-  // const getFormattedDate = () => {
-  //   return creationDate.toLocaleDateString('es-ES', dateOptions)
-  // }
 
   return (
     <motion.div
@@ -28,24 +30,35 @@ const TodoItem = ({
       key={id}
       className={styles.todo}
       variants={animationVariants}
+      ref={itemRef}
     >
-      <span>{title}</span>
-      
-      {/* <span className={styles.date}>
-        {getFormattedDate()}
-      </span> */}
-      
+      {isEditing ? (
+        <div style={{ position: "relative" }}>
+          <input
+            className={styles["editing"]}
+            type='text'
+            value={todoText}
+            onChange={(e) => setTodoText(e.currentTarget.value)}
+          />
+          <Pill text={"Editando"} />
+        </div>
+      ) : (
+        <span className={styles["item"]}>{title}</span>
+      )}
+
+      <motion.div className={styles["edit"]} onClick={handleClickEdit}>
+        {isEditing ? "✔️" : "✏️"}
+      </motion.div>
+
       <motion.div
-        className={styles['delete']}
+        className={styles["delete"]}
         whileHover={hoverAnimation}
         onClick={() => onRemove(id)}
       >
-        <span>
-          ✘
-        </span>
+        <span>✘</span>
       </motion.div>
     </motion.div>
   );
-}
+};
 
 export default TodoItem;

@@ -26,10 +26,9 @@ const Hero = () => {
       </div>
 
       <div className={styles['hero-right']}>
-        <h1>Tu bloc de notitas, más rápido que nadie 🚀</h1>
         <div className={styles['hero-image']}>
           <Image
-            src="/notes2.svg"
+            src="/notes.svg"
             width={600}
             height={400}
             quality={100}

@@ -24,15 +24,15 @@
 .hero-right {
   display: none;
 
-  @include from('desktop') {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    flex-basis: 100%;
-    order: 1;
-    padding: 24px;
-  }
+  // @include from('desktop') {
+  //   display: flex;
+  //   flex-direction: column;
+  //   justify-content: center;
+  //   align-items: flex-start;
+  //   flex-basis: 100%;
+  //   order: 1;
+  //   padding: 24px;
+  // }
 
   h1 {
     color: $purple;

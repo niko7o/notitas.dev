@@ -22,8 +22,8 @@ const HowItWorks = ({ isCloseButtonShown }) => (
     </p>
 
     <p>
-      Puedes ver el código fuente de la <a href="https://github.com/nikotomad/notitas.dev/blob/master/components/TodoList/TodoList.js#L63" target="_blank">
-      función añadir aquí</a> o el proyecto entero aquí: <a href="https://github.com/nikotomad/notitas.dev" target="_blank">https://github.com/nikotomad/notitas.dev</a>
+      Puedes ver el código fuente de la <a href="https://github.com/niko7o/notitas.dev/blob/master/components/TodoList/TodoList.js#L63" target="_blank">
+      función añadir aquí</a> o el proyecto entero aquí: <a href="https://github.com/niko7o/notitas.dev" target="_blank">https://github.com/niko7o/notitas.dev</a>
     </p>
   </div>
   {isCloseButtonShown && <span className={styles.close}>x</span>}

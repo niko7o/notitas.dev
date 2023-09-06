@@ -6,6 +6,8 @@
   overflow-y: auto;
   min-height: 100vh;
   margin-top: 32px;
+  display: flex;
+  align-items: center;
   
   @include from('tablet') {
     margin-left: 50px;
@@ -19,7 +21,7 @@
 
 .form {
   display: grid;
-  justify-content: start;
+  place-content: center;
   box-sizing: border-box;
   position: fixed;
   bottom: 0;

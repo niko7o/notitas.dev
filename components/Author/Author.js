@@ -11,7 +11,7 @@ const Author = () => {
     <p className={styles.author}>
       made with ☕ by{' '}
       <a
-        href="https://nikoto.dev"
+        href="https://github.com/niko7o"
         target="_blank"
         rel="noreferrer"
         className={styles['author-name']}

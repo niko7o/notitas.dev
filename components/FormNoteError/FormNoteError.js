@@ -4,6 +4,7 @@ const ERROR_COPIES = {
   1: 'Pero escribe algo, cabesa! 🤔',
   2: '¿Quieres escribir?',
   3: 'Poeta de la familia.. no eres.',
+  4: 'Compadre te estás pasando. Escribe.'
 }
 
 const FormNoteError = ({ errorCount }) => (
