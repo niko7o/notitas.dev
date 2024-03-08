@@ -1,7 +1,13 @@
 import '../styles/globals.scss'
 
-function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+import { FeatureFlagsProvider } from '../context/FeatureFlags'
+
+const MyApp = ({ Component, pageProps }) => {
+  return (
+    <FeatureFlagsProvider>
+      <Component {...pageProps} />
+    </FeatureFlagsProvider>
+  )
 }
 
 export default MyApp
