@@ -1,8 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-import { sendEvent } from "../../utils/google-analytics";
-
 import Button from "../Button";
 import TodoItem from "../TodoItem";
 import TextInput from "../TextInput";
@@ -11,6 +9,8 @@ import FormNoteError from "../FormNoteError";
 import { LOCAL_STORAGE_KEY } from "../../utils/constants";
 
 import { containerVariants, itemVariants } from "./animations";
+
+import { useFeatureFlags } from '../../hooks/useFeatureFlags';
 
 import styles from "./TodoList.module.scss";
 
@@ -21,7 +21,9 @@ const TodoList = () => {
   const [todoList, setTodoList] = useState([]); // @TO-DO: use /notes endpoint
   const [hasError, setHasError] = useState(false);
   const [errorCount, setErrorCount] = useState(0);
-  const [currentEditIndex, setCurrentEditIndex] = useState(null);
+
+  const { flags: featureFlags = [] } = useFeatureFlags();
+  const isRedesign = featureFlags?.includes('redesign') || false;
 
   useEffect(() => {
     const localTodos = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -60,11 +62,9 @@ const TodoList = () => {
       );
       setTodoList([...todoList, newTodo]);
       inputRef.current.value = "";
-      sendEvent({ category: "TodoItem", label: "Add", value: "Success" });
     } else {
       showErrorForSeconds(3);
       setErrorCount(errorCount + 1);
-      sendEvent({ category: "TodoItem", label: "Add", value: "Error" });
     }
   };
 
@@ -72,7 +72,6 @@ const TodoList = () => {
     const filteredTodos = todoList.filter((item) => item.id !== idToRemove);
     setTodoList(filteredTodos);
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(filteredTodos));
-    sendEvent({ category: "TodoItem", label: "Remove", value: "Success" });
   };
 
   const handleKeyPress = (event) => {
@@ -140,7 +139,10 @@ const TodoList = () => {
             onKeyPress={handleKeyPress}
             placeholder='Escribe aquí..'
           />
-          <Button onClick={addTodoItem} title='Añadir nota (Enter)' />
+          <Button 
+            onClick={addTodoItem} 
+            title={isRedesign ? 'Añadir nota' : 'Añadir nota (Enter)'}
+          />
           {hasError && <FormNoteError errorCount={errorCount} />}
         </motion.div>
       </AnimatePresence>

@@ -5,7 +5,7 @@ import posthog from 'posthog-js';
 export const FeatureFlagsContext = createContext({});
 
 export const FeatureFlagsProvider = ({ children }) => {
-	const [posthogFlags, setPosthogFlags] = useState({});
+	const [posthogFlags, setPosthogFlags] = useState([]);
 
 	useEffect(() => {
 		posthog.init('phc_1RTcwrmOKtsl66iMXMyx1RjSEx4SzUYYazvBiN49Etm', { 

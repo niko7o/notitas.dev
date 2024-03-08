@@ -8,10 +8,15 @@ import styles from "./TodoItem.module.scss";
 
 import { hoverAnimation } from "./animations";
 
+import { useFeatureFlags } from '../../hooks/useFeatureFlags';
+
 const TodoItem = ({ id, title, animationVariants, onRemove, onEditSave }) => {
   const itemRef = useRef({});
   const [todoText, setTodoText] = useState(title);
   const [isEditing, setIsEditing] = useState(false);
+
+  const { flags: featureFlags = [] } = useFeatureFlags();
+  const isRedesign = featureFlags?.includes('redesign') || false;
 
   const handleClickEdit = () => {
     itemRef.current.focus();
@@ -28,7 +33,7 @@ const TodoItem = ({ id, title, animationVariants, onRemove, onEditSave }) => {
     <motion.div
       layout
       key={id}
-      className={styles.todo}
+      className={`${styles.todo} ${isRedesign && styles['todo-redesign']}`}
       variants={animationVariants}
       ref={itemRef}
     >

@@ -1,11 +1,27 @@
 .button {
-  font-family: 'IBM Plex Sans', sans-serif;
+  font-family: "IBM Plex Sans", sans-serif;
   font-size: 10px;
   padding: 18px 24px;
-  background-color:#ffc57e;
+  background-color: #ffc57e;
   border-radius: 4px;
   border: 0;
   cursor: pointer;
   text-transform: uppercase;
   box-shadow: 0 1px 36px #00000029;
+}
+
+.button-redesign {
+  color: white;
+  background-color: #6f8bff;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  border-radius: 12px;
+  text-transform: unset;
+  width: fit-content;
+  padding: 18px 32px 18px 24px;
+
+  & svg {
+    margin-right: 16px;
+  }
 }

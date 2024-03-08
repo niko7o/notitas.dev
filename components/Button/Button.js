@@ -1,26 +1,24 @@
-import { useEffect } from 'react';
-
 import { motion } from 'framer-motion';
+
+import NoteIcon from '../../icons/Note';
 
 import styles from './Button.module.scss';
 
 import useFeatureFlags from '../../hooks/useFeatureFlags';
 
 export default function Button({ title, onClick }) {
-  const { flags } = useFeatureFlags();
-  
-  useEffect(() => {    
-    console.log('Button flags', flags)
-  }, [flags])
+  const { flags: featureFlags = [] } = useFeatureFlags();
+  const isButtonRedesigned = featureFlags?.includes('redesign') || false;
 
-  return (
+  return featureFlags.length > 0 ? (
     <motion.button
       layout
       onClick={onClick} 
-      className={styles.button}
       whileHover={{ scale: 1.1 }}
+      className={`${styles.button} ${isButtonRedesigned && styles['button-redesign']}`}
     >
+      {isButtonRedesigned && <NoteIcon />}
       {title}
     </motion.button>
-  )
+  ) : null
 }
