@@ -163,6 +163,56 @@ $yellow: #f5c74f;
   > div { content-visibility: auto; }
 }
 
+.note-section + .note-section {
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid $line;
+}
+
+.section-heading {
+  min-height: 28px;
+  padding: 0 10px 7px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: $muted;
+
+  h2 {
+    margin: 0;
+    font-size: 10px;
+    font-weight: 750;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  > span {
+    min-width: 22px;
+    padding: 3px 7px;
+    color: #65685f;
+    background: #ebe8df;
+    border-radius: 999px;
+    font-size: 9px;
+    font-weight: 750;
+    text-align: center;
+  }
+}
+
+.done-section .section-heading {
+  h2 { color: #66704e; }
+  > span { color: #5f674b; background: #e6eadb; }
+}
+
+.empty-section {
+  margin: 4px 10px 10px;
+  padding: 16px;
+  color: $muted;
+  background: rgba(255, 255, 255, 0.42);
+  border: 1px dashed #d8d5ca;
+  border-radius: 12px;
+  font-size: 12px;
+  text-align: center;
+}
+
 .empty-list {
   min-height: 300px;
   padding: 60px 30px;
@@ -211,7 +261,7 @@ $yellow: #f5c74f;
 .editor-shell {
   height: 100%;
   display: grid;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: auto auto 1fr auto;
 }
 
 .editor-header {
@@ -271,6 +321,93 @@ $yellow: #f5c74f;
   border-radius: 6px;
   font-size: 10px;
   font-weight: 600;
+}
+
+.note-controls {
+  min-height: 58px;
+  padding: 9px 26px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  background: #faf8f1;
+  border-bottom: 1px solid $line;
+}
+
+.priority-control {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  > span {
+    color: $muted;
+    font-size: 10px;
+    font-weight: 750;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  > div {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+}
+
+.priority-option {
+  min-height: 32px;
+  padding: 6px 9px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #686b64;
+  background: transparent;
+  border: 1px solid #d8d6cc;
+  border-radius: 9px;
+  font: inherit;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: color 160ms ease, background-color 160ms ease, border-color 160ms ease, transform 160ms ease;
+
+  i {
+    width: 7px;
+    height: 7px;
+    background: currentColor;
+    border-radius: 50%;
+  }
+
+  &:hover { transform: translateY(-1px); }
+  &:focus-visible { outline: 3px solid rgba(255, 118, 87, 0.28); outline-offset: 1px; }
+}
+
+.priority-high { color: #a94330; }
+.priority-mid { color: #8a6818; }
+.priority-low { color: #627044; }
+.priority-high.priority-selected { color: #873522; background: #fbe6df; border-color: #e1a493; }
+.priority-mid.priority-selected { color: #745711; background: #fbefc9; border-color: #ddc777; }
+.priority-low.priority-selected { color: #4f5b37; background: #e8eddd; border-color: #b7c29a; }
+
+.completion-button {
+  min-height: 36px;
+  padding: 7px 11px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  flex: none;
+  color: #58643d;
+  background: #edf0e4;
+  border: 1px solid #c8cfb5;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 160ms ease, transform 160ms ease;
+
+  &:hover { background: #e3e8d6; transform: translateY(-1px); }
+  &:focus-visible { outline: 3px solid rgba(130, 147, 83, 0.28); outline-offset: 2px; }
 }
 
 .paper {
@@ -418,6 +555,11 @@ $yellow: #f5c74f;
   .editor-visible { display: block; }
   .back-button { display: grid; }
   .editor-header { min-height: 72px; padding: 12px 14px; }
+  .note-controls { min-height: 54px; padding: 8px 14px; gap: 10px; }
+  .priority-control { gap: 7px; }
+  .priority-control > span { display: none; }
+  .priority-option { padding-inline: 8px; }
+  .completion-button { padding-inline: 9px; }
   .shortcut { display: none; }
   .save-button { padding-inline: 16px; }
   .paper { padding: 30px 22px 20px; }
@@ -428,5 +570,7 @@ $yellow: #f5c74f;
 
 @media (prefers-reduced-motion: reduce) {
   .new-note,
-  .save-button { transition: none; }
+  .save-button,
+  .priority-option,
+  .completion-button { transition: none; }
 }

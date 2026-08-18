@@ -14,14 +14,15 @@ const formatDate = (date, locale, fallback) => {
   }).format(parsedDate);
 };
 
-const TodoItem = ({ id, title, creationDate, isSelected, animationVariants, onSelect }) => {
+const TodoItem = ({ id, title, priority, creationDate, isCompleted, isSelected, animationVariants, onSelect }) => {
   const { locale, t } = useLocale();
+  const priorityLabel = priority ? t.todo.priorities[priority] : null;
 
   return (
     <motion.button
       layout
       key={id}
-      className={`${styles.todo} ${isSelected ? styles.selected : ""}`}
+      className={`${styles.todo} ${isSelected ? styles.selected : ""} ${isCompleted ? styles.completed : ""}`}
       variants={animationVariants}
       onClick={onSelect}
       type="button"
@@ -31,6 +32,11 @@ const TodoItem = ({ id, title, creationDate, isSelected, animationVariants, onSe
       <span className={styles.meta}>
         <span>{formatDate(creationDate, locale, t.todo.now)}</span>
         <span>{title.trim().split(/\s+/).length} {t.todo.wordAbbreviation}</span>
+        {priorityLabel ? (
+          <span className={`${styles.priority} ${styles[`priority-${priority}`]}`}>
+            {priorityLabel}
+          </span>
+        ) : null}
         <span className={styles.arrow} aria-hidden="true">→</span>
       </span>
     </motion.button>

@@ -10,6 +10,8 @@ import { useLocale } from "../../context/Locale";
 
 import styles from "./TodoList.module.scss";
 
+const PRIORITIES = ["high", "mid", "low"];
+
 const formatDate = (date, locale, fallback) => {
   if (!date) return fallback;
 
@@ -29,6 +31,7 @@ const TodoList = () => {
   const [todoList, setTodoList] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [editorText, setEditorText] = useState("");
+  const [editorPriority, setEditorPriority] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [isCreating, setIsCreating] = useState(false);
   const [hasError, setHasError] = useState(false);
@@ -44,8 +47,10 @@ const TodoList = () => {
       if (Array.isArray(parsedTodos)) {
         setTodoList(parsedTodos);
         const shouldOpenFirstNote = window.matchMedia("(min-width: 761px)").matches;
-        setSelectedId(shouldOpenFirstNote ? parsedTodos[0]?.id || null : null);
-        setEditorText(shouldOpenFirstNote ? parsedTodos[0]?.title || "" : "");
+        const firstTodo = parsedTodos.find((todo) => !todo.isCompleted) || parsedTodos[0];
+        setSelectedId(shouldOpenFirstNote ? firstTodo?.id || null : null);
+        setEditorText(shouldOpenFirstNote ? firstTodo?.title || "" : "");
+        setEditorPriority(shouldOpenFirstNote ? firstTodo?.priority || null : null);
       }
     } catch {
       setTodoList([]);
@@ -65,6 +70,9 @@ const TodoList = () => {
     );
   }, [locale, searchQuery, todoList]);
 
+  const activeTodos = filteredTodos.filter((item) => !item.isCompleted);
+  const completedTodos = filteredTodos.filter((item) => item.isCompleted);
+
   const selectedTodo = todoList.find((item) => item.id === selectedId);
 
   const persistTodos = (nextTodos) => {
@@ -75,6 +83,7 @@ const TodoList = () => {
   const beginNewNote = () => {
     setSelectedId(null);
     setEditorText("");
+    setEditorPriority(null);
     setIsCreating(true);
     setDeleteArmed(false);
   };
@@ -82,6 +91,7 @@ const TodoList = () => {
   const selectNote = (item) => {
     setSelectedId(item.id);
     setEditorText(item.title);
+    setEditorPriority(item.priority || null);
     setIsCreating(false);
     setDeleteArmed(false);
   };
@@ -101,6 +111,7 @@ const TodoList = () => {
         id: `${nextText[0]}#${Date.now()}`,
         title: nextText,
         isCompleted: false,
+        priority: editorPriority,
         creationDate: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
@@ -116,11 +127,55 @@ const TodoList = () => {
 
     const nextTodos = todoList.map((todo) =>
       todo.id === selectedTodo.id
-        ? { ...todo, title: nextText, updatedAt: new Date().toISOString() }
+        ? { ...todo, title: nextText, priority: editorPriority, updatedAt: new Date().toISOString() }
         : todo
     );
     persistTodos(nextTodos);
     setEditorText(nextText);
+  };
+
+  const updatePriority = (priority) => {
+    const nextPriority = editorPriority === priority ? null : priority;
+    setEditorPriority(nextPriority);
+
+    if (!selectedTodo || isCreating) return;
+
+    const nextTodos = todoList.map((todo) =>
+      todo.id === selectedTodo.id
+        ? { ...todo, priority: nextPriority, updatedAt: new Date().toISOString() }
+        : todo
+    );
+    persistTodos(nextTodos);
+  };
+
+  const toggleSelectedCompletion = () => {
+    if (!selectedTodo) return;
+
+    const nextText = editorText.trim();
+    if (!nextText) {
+      setHasError(true);
+      setErrorCount((count) => count + 1);
+      window.setTimeout(() => setHasError(false), 3000);
+      return;
+    }
+
+    const completedAt = selectedTodo.isCompleted ? null : new Date().toISOString();
+    const nextTodos = todoList.map((todo) =>
+      todo.id === selectedTodo.id
+        ? {
+            ...todo,
+            title: nextText,
+            priority: editorPriority,
+            isCompleted: !todo.isCompleted,
+            completedAt,
+            updatedAt: new Date().toISOString(),
+          }
+        : todo
+    );
+
+    persistTodos(nextTodos);
+    setEditorText(nextText);
+    setDeleteArmed(false);
   };
 
   const removeSelectedNote = () => {
@@ -136,12 +191,14 @@ const TodoList = () => {
     persistTodos(nextTodos);
     setSelectedId(nextSelection?.id || null);
     setEditorText(nextSelection?.title || "");
+    setEditorPriority(nextSelection?.priority || null);
     setDeleteArmed(false);
   };
 
   const closeEditor = () => {
     setSelectedId(null);
     setEditorText("");
+    setEditorPriority(null);
     setIsCreating(false);
     setDeleteArmed(false);
   };
@@ -196,19 +253,56 @@ const TodoList = () => {
 
         <div className={styles["notes-scroll"]}>
           {filteredTodos.length > 0 ? (
-            <motion.div variants={containerVariants} initial="entering" animate="active">
-              {filteredTodos.map((item) => (
-                <TodoItem
-                  id={item.id}
-                  key={item.id}
-                  title={item.title}
-                  creationDate={item.updatedAt || item.creationDate}
-                  isSelected={item.id === selectedId}
-                  animationVariants={itemVariants}
-                  onSelect={() => selectNote(item)}
-                />
-              ))}
-            </motion.div>
+            <>
+              <section className={styles["note-section"]} aria-labelledby="active-notes-heading">
+                <div className={styles["section-heading"]}>
+                  <h2 id="active-notes-heading">{t.todo.activeSection}</h2>
+                  <span>{activeTodos.length}</span>
+                </div>
+                {activeTodos.length > 0 ? (
+                  <motion.div variants={containerVariants} initial="entering" animate="active">
+                    {activeTodos.map((item) => (
+                      <TodoItem
+                        id={item.id}
+                        key={item.id}
+                        title={item.title}
+                        priority={item.priority}
+                        creationDate={item.updatedAt || item.creationDate}
+                        isSelected={item.id === selectedId}
+                        animationVariants={itemVariants}
+                        onSelect={() => selectNote(item)}
+                      />
+                    ))}
+                  </motion.div>
+                ) : (
+                  <p className={styles["empty-section"]}>{t.todo.noActiveNotes}</p>
+                )}
+              </section>
+
+              {completedTodos.length > 0 ? (
+                <section className={`${styles["note-section"]} ${styles["done-section"]}`} aria-labelledby="done-notes-heading">
+                  <div className={styles["section-heading"]}>
+                    <h2 id="done-notes-heading">{t.todo.doneSection}</h2>
+                    <span>{completedTodos.length}</span>
+                  </div>
+                  <motion.div variants={containerVariants} initial="entering" animate="active">
+                    {completedTodos.map((item) => (
+                      <TodoItem
+                        id={item.id}
+                        key={item.id}
+                        title={item.title}
+                        priority={item.priority}
+                        creationDate={item.updatedAt || item.creationDate}
+                        isCompleted
+                        isSelected={item.id === selectedId}
+                        animationVariants={itemVariants}
+                        onSelect={() => selectNote(item)}
+                      />
+                    ))}
+                  </motion.div>
+                </section>
+              ) : null}
+            </>
           ) : (
             <div className={styles["empty-list"]}>
               <span aria-hidden="true">{searchQuery ? "⌕" : "✦"}</span>
@@ -238,6 +332,45 @@ const TodoList = () => {
                 <span className={styles.shortcut}>⌘ ↵</span>
               </button>
             </header>
+
+            <div className={styles["note-controls"]}>
+              <div className={styles["priority-control"]} role="group" aria-label={t.todo.priorityLabel}>
+                <span>{t.todo.priorityLabel}</span>
+                <div>
+                  {PRIORITIES.map((priority) => {
+                    const isActive = editorPriority === priority;
+                    const priorityLabel = t.todo.priorities[priority];
+
+                    return (
+                      <button
+                        className={`${styles["priority-option"]} ${styles[`priority-${priority}`]} ${isActive ? styles["priority-selected"] : ""}`}
+                        type="button"
+                        key={priority}
+                        aria-pressed={isActive}
+                        aria-label={isActive ? `${t.todo.removePriority} ${priorityLabel}` : `${t.todo.setPriority} ${priorityLabel}`}
+                        onClick={() => updatePriority(priority)}
+                      >
+                        <i aria-hidden="true" />
+                        {priorityLabel}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {!isCreating ? (
+                <button className={styles["completion-button"]} type="button" onClick={toggleSelectedCompletion}>
+                  <svg aria-hidden="true" viewBox="0 0 24 24" width="17" height="17">
+                    {selectedTodo?.isCompleted ? (
+                      <path d="M4 12a8 8 0 1 0 2.3-5.7M4 5v5h5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                    ) : (
+                      <path d="m5 12 4 4L19 6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    )}
+                  </svg>
+                  {selectedTodo?.isCompleted ? t.todo.restore : t.todo.markDone}
+                </button>
+              ) : null}
+            </div>
 
             <div className={styles.paper}>
               <textarea

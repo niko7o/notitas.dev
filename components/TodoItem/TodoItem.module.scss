@@ -34,6 +34,20 @@
   .arrow { color: #d95235; transform: translateX(2px); }
 }
 
+.completed {
+  opacity: 0.72;
+
+  .note-preview {
+    color: #666a61;
+    text-decoration: line-through;
+    text-decoration-color: #9ba586;
+    text-decoration-thickness: 1px;
+  }
+
+  &:hover,
+  &.selected { opacity: 1; }
+}
+
 .note-preview {
   display: -webkit-box;
   overflow: hidden;
@@ -75,3 +89,16 @@
 
   &::before { display: none; }
 }
+
+.priority {
+  padding: 3px 6px;
+  border-radius: 999px;
+  font-size: 8px;
+  letter-spacing: 0.07em;
+
+  &::before { display: none; }
+}
+
+.priority-high { color: #8d3927; background: #f6ded6; }
+.priority-mid { color: #735712; background: #f7e9b7; }
+.priority-low { color: #56633b; background: #e3e9d6; }
