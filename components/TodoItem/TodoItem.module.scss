@@ -1,66 +1,77 @@
-@import "../../styles/breakpoints.scss";
-@import "../../styles/color-palette.scss";
-
 .todo {
+  width: 100%;
+  min-height: 112px;
+  margin: 0 0 6px;
+  padding: 17px 16px 14px;
   display: flex;
-  padding: 10px;
-  padding-left: 48px;
-  align-items: center;
-  margin-bottom: 16px;
-  border-radius: 100px;
-  font-size: 24px;
-
-  &:nth-last-child(1) {
-    margin-bottom: 0;
-  }
-
-  @include from("desktop") {
-    padding: 20px;
-  }
-}
-
-.todo-redesign {
-  background-color: #f5f5f5;
-  padding-left: 32px;
-}
-
-.date {
-  font-size: 10px;
-  text-transform: uppercase;
-  margin-left: auto;
-}
-
-.delete {
-  display: grid;
-  place-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  font-size: 10px;
-  font-family: sans-serif;
+  flex-direction: column;
+  text-align: left;
+  color: #20221f;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 13px;
   cursor: pointer;
-  margin-left: 16px;
-  color: #ab865a;
-  background-color: #ffc67f;
-  flex-shrink: 0;
-}
-
-.edit {
-  font-size: 24px;
-  margin-left: auto;
-  margin-right: 16px;
-  cursor: pointer;
+  font: inherit;
+  transition: background-color 160ms ease, border-color 160ms ease, transform 160ms ease;
 
   &:hover {
-    opacity: 0.7;
+    background: rgba(255, 255, 255, 0.72);
+    border-color: #e2e0d7;
+    transform: translateX(2px);
+  }
+
+  &:focus-visible {
+    outline: 3px solid rgba(255, 118, 87, 0.32);
+    outline-offset: -2px;
   }
 }
 
-.editing {
-  font-family: "IBM Plex Sans", sans-serif;
-  font-size: 24px;
-  outline: none;
-  border: 0px transparent;
+.selected {
+  background: #fffef9;
+  border-color: #d8d6cc;
+  box-shadow: 0 7px 22px rgba(53, 48, 37, 0.07);
+
+  .arrow { color: #d95235; transform: translateX(2px); }
+}
+
+.note-preview {
+  display: -webkit-box;
+  overflow: hidden;
+  color: #292b27;
+  font-family: "Newsreader", Georgia, serif;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.26;
+  letter-spacing: -0.012em;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow-wrap: anywhere;
+}
+
+.meta {
   width: 100%;
-  border-bottom: 1px solid #9badff;
+  margin-top: auto;
+  padding-top: 11px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #85877f;
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+
+  span + span::before {
+    content: "·";
+    margin-right: 10px;
+    color: #bbb9b0;
+  }
+}
+
+.arrow {
+  margin-left: auto;
+  font-size: 16px;
+  transition: transform 160ms ease;
+
+  &::before { display: none; }
 }

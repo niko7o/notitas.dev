@@ -1,18 +1,20 @@
 import { motion } from 'framer-motion';
 
 const ERROR_COPIES = {
-  1: 'Pero escribe algo, cabesa! 🤔',
-  2: '¿Quieres escribir?',
-  3: 'Poeta de la familia.. no eres.',
-  4: 'Compadre te estás pasando. Escribe.'
+  1: 'Escribe algo antes de guardar.',
+  2: 'La nota todavía está vacía.',
+  3: 'Añade una idea, aunque sea pequeña.',
+  4: 'Necesitamos al menos una palabra.'
 }
 
 const FormNoteError = ({ errorCount }) => (
   <motion.span
+    role="status"
+    aria-live="polite"
     layout
-    initial={{ marginTop: '10px', opacity: 0, y: -20, color: 'crimson' }}
+    initial={{ opacity: 0, y: 8 }}
     animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: 20 }}
+    exit={{ opacity: 0, y: 8 }}
   >
     {ERROR_COPIES[errorCount] || 'Escribe algo anda.'}
   </motion.span>

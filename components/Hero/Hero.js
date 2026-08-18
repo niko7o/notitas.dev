@@ -1,57 +1,43 @@
-import Image from 'next/image';
+import { AnimatePresence } from "framer-motion";
+import Link from "next/link";
 
-import { AnimatePresence } from 'framer-motion';
+import TodoList from "../TodoList";
+import Modal from "../Modal";
+import HowItWorks from "../HowItWorks";
 
-import Author from '../Author';
-import TodoList from '../TodoList';
-import Modal from '../Modal';
-import HowItWorks from '../HowItWorks';
+import styles from "./Hero.module.scss";
 
-import styles from './Hero.module.scss';
-
-import { useModalHandle } from '../../utils/hooks';
-import { LOCAL_STORAGE_KEY } from '../../utils/constants';
+import { useModalHandle } from "../../utils/hooks";
 
 const Hero = () => {
   const { isModalOpen, openModal, closeModal } = useModalHandle();
 
-  const persistedTodos = 
-    typeof window !== 'undefined' 
-    && localStorage.getItem(LOCAL_STORAGE_KEY) || [];
-  
   return (
     <div className={styles.hero}>
-      <div className={styles['hero-left']}>
-        {persistedTodos && <TodoList items={persistedTodos} />}
-      </div>
-
-      <div className={styles['hero-right']}>
-        <div className={styles['hero-image']}>
-          <Image
-            src="/notes.svg"
-            width={600}
-            height={400}
-            quality={100}
-            priority 
-          />
+      <header className={styles.topbar}>
+        <Link href="/">
+          <a className={styles.brand} aria-label="notitas.dev, inicio">
+            <span aria-hidden="true">n.</span>
+            <strong>notitas.dev</strong>
+          </a>
+        </Link>
+        <div className={styles["topbar-actions"]}>
+          <span className={styles.privacy}><i aria-hidden="true" /> privado · local · tuyo</span>
+          <button type="button" onClick={openModal}>Cómo funciona</button>
         </div>
-      </div>
+      </header>
 
-      <Author />
-      
-      <a className={styles['hiw-cta']} onClick={openModal}>
-        Cómo funciona
-      </a>
-      
+      <TodoList />
+
       <AnimatePresence>
-        {isModalOpen && (
-          <Modal key="animatedModal" closeModal={closeModal}>
+        {isModalOpen ? (
+          <Modal key="animatedModal" closeModal={closeModal} isCloseButtonShown>
             <HowItWorks />
           </Modal>
-        )}
+        ) : null}
       </AnimatePresence>
     </div>
-  )
-}
+  );
+};
 
 export default Hero;

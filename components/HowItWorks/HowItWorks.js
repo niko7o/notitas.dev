@@ -1,33 +1,33 @@
+import styles from "./HowItWorks.module.scss";
 
-import styles from './HowItWorks.module.scss';
-
-const HowItWorks = ({ isCloseButtonShown }) => (
-  <>
-  <div className={styles['how-it-works']}>
+const HowItWorks = () => (
+  <div className={styles["how-it-works"]}>
+    <span className={styles.eyebrow}>SIMPLE A PROPÓSITO</span>
+    <h2>Tus ideas, sin ruido.</h2>
     <p>
-      Este proyecto hobby sale de la necesidad de escribir pequeñas <strong>notitas </strong>
-      (apuntes, comentarios, puntos de entrevista etc) y no querer abrir aplicaciones
-      cómo Notion o similares por optimizar tiempo y recursos. <br />
+      notitas.dev es un lugar rápido para apuntes, comentarios y pequeñas ideas sin abrir una herramienta más pesada.
     </p>
 
-    <p>
-      Por tu <strong>privacidad</strong> y la del resto de usuarios, las notas NO se almacenan en ninguna parte más que tu propio navegador
-      (google chrome, safari, etc) usando el <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage" target="_blank">local storage</a> de estos últimos.
-    </p>
+    <div className={styles.grid}>
+      <article>
+        <span>01</span>
+        <h3>Escribe</h3>
+        <p>Crea una nota y usa <kbd>⌘ Enter</kbd> para guardarla sin apartar las manos del teclado.</p>
+      </article>
+      <article>
+        <span>02</span>
+        <h3>Encuentra</h3>
+        <p>Las notas largas se resumen en la lista. Busca, selecciona y edita el contenido completo a la derecha.</p>
+      </article>
+    </div>
 
-    <p>
-      <strong>Disclaimer</strong>: si cambias de dispositivo o limpias las cookies de tu navegador, perderás
-      todas las notitas que tengas almacenadas hasta el momento. Por favor, ten esto en
-      cuenta para no tener sorpresas!
-    </p>
+    <aside>
+      <strong>Privacidad local</strong>
+      <p>Las notas viven únicamente en el almacenamiento de este navegador. Si cambias de dispositivo o borras sus datos, también se eliminarán tus notas.</p>
+    </aside>
 
-    <p>
-      Puedes ver el código fuente de la <a href="https://github.com/niko7o/notitas.dev/blob/master/components/TodoList/TodoList.js#L63" target="_blank">
-      función añadir aquí</a> o el proyecto entero aquí: <a href="https://github.com/niko7o/notitas.dev" target="_blank">https://github.com/niko7o/notitas.dev</a>
-    </p>
+    <a href="https://github.com/niko7o/notitas.dev" target="_blank" rel="noreferrer">Ver el proyecto en GitHub <span aria-hidden="true">↗</span></a>
   </div>
-  {isCloseButtonShown && <span className={styles.close}>x</span>}
-  </>
 );
 
 export default HowItWorks;

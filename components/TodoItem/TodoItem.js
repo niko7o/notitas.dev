@@ -1,69 +1,32 @@
-import { useState, useRef } from "react";
-
 import { motion } from "framer-motion";
-
-import Pill from "../Pill";
 
 import styles from "./TodoItem.module.scss";
 
-import { hoverAnimation } from "./animations";
+const formatDate = (date) => {
+  if (!date) return "Ahora";
+  const parsedDate = new Date(date);
+  if (Number.isNaN(parsedDate.getTime())) return "Ahora";
 
-import { useFeatureFlags } from '../../hooks/useFeatureFlags';
-
-const TodoItem = ({ id, title, animationVariants, onRemove, onEditSave }) => {
-  const itemRef = useRef({});
-  const [todoText, setTodoText] = useState(title);
-  const [isEditing, setIsEditing] = useState(false);
-
-  const { flags: featureFlags = [] } = useFeatureFlags();
-  const isRedesign = featureFlags?.includes('redesign') || false;
-
-  const handleClickEdit = () => {
-    itemRef.current.focus();
-    if (isEditing) {
-      setIsEditing(false);
-    } else {
-      setIsEditing(true);
-    }
-    console.log(itemRef.current);
-    onEditSave({ id, title: todoText });
-  };
-
-  return (
-    <motion.div
-      layout
-      key={id}
-      className={`${styles.todo} ${isRedesign && styles['todo-redesign']}`}
-      variants={animationVariants}
-      ref={itemRef}
-    >
-      {isEditing ? (
-        <div style={{ position: "relative" }}>
-          <input
-            className={styles["editing"]}
-            type='text'
-            value={todoText}
-            onChange={(e) => setTodoText(e.currentTarget.value)}
-          />
-          <Pill text={"Editando"} />
-        </div>
-      ) : (
-        <span className={styles["item"]}>{title}</span>
-      )}
-
-      <motion.div className={styles["edit"]} onClick={handleClickEdit}>
-        {isEditing ? "✔️" : "✏️"}
-      </motion.div>
-
-      <motion.div
-        className={styles["delete"]}
-        whileHover={hoverAnimation}
-        onClick={() => onRemove(id)}
-      >
-        <span>✘</span>
-      </motion.div>
-    </motion.div>
-  );
+  return new Intl.DateTimeFormat("es-ES", { day: "numeric", month: "short" }).format(parsedDate);
 };
+
+const TodoItem = ({ id, title, creationDate, isSelected, animationVariants, onSelect }) => (
+  <motion.button
+    layout
+    key={id}
+    className={`${styles.todo} ${isSelected ? styles.selected : ""}`}
+    variants={animationVariants}
+    onClick={onSelect}
+    type="button"
+    aria-current={isSelected ? "true" : undefined}
+  >
+    <span className={styles["note-preview"]}>{title}</span>
+    <span className={styles.meta}>
+      <span>{formatDate(creationDate)}</span>
+      <span>{title.trim().split(/\s+/).length} pal.</span>
+      <span className={styles.arrow} aria-hidden="true">→</span>
+    </span>
+  </motion.button>
+);
 
 export default TodoItem;
