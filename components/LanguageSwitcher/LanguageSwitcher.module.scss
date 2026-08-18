@@ -1,0 +1,52 @@
+.switcher {
+  display: grid;
+  grid-template-columns: repeat(2, 34px);
+  padding: 2px;
+  border: 1px solid #c8c5ba;
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 8px;
+}
+
+.option {
+  position: relative;
+  min-height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 5px;
+  color: #6d7068;
+  background: transparent;
+  font: inherit;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 3px solid rgba(255, 118, 87, 0.3);
+    outline-offset: 3px;
+  }
+}
+
+.active {
+  color: #20221f;
+}
+
+.indicator {
+  position: absolute;
+  inset: 0;
+  border-radius: 5px;
+  border: 1px solid #20221f;
+  background: #f5c74f;
+  box-shadow: 2px 2px 0 #20221f;
+}
+
+.label {
+  position: relative;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .indicator {
+    transition: none;
+  }
+}

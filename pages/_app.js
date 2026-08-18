@@ -1,12 +1,15 @@
 import '../styles/globals.scss'
 
 import { FeatureFlagsProvider } from '../context/FeatureFlags'
+import { LocaleProvider } from '../context/Locale'
 
 const MyApp = ({ Component, pageProps }) => {
   return (
-    <FeatureFlagsProvider>
-      <Component {...pageProps} />
-    </FeatureFlagsProvider>
+    <LocaleProvider>
+      <FeatureFlagsProvider>
+        <Component {...pageProps} />
+      </FeatureFlagsProvider>
+    </LocaleProvider>
   )
 }
 

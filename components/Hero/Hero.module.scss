@@ -39,9 +39,9 @@
 .topbar-actions {
   display: flex;
   align-items: center;
-  gap: 22px;
+  gap: 14px;
 
-  button {
+  .info-button {
     padding: 8px 0;
     color: #4f524c;
     background: none;
@@ -79,5 +79,5 @@
 @media (max-width: 760px) {
   .topbar { width: calc(100% - 32px); height: 72px; }
   .privacy { display: none; }
-  .topbar-actions { gap: 0; }
+  .topbar-actions { gap: 10px; }
 }

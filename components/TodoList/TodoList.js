@@ -6,16 +6,17 @@ import FormNoteError from "../FormNoteError";
 
 import { LOCAL_STORAGE_KEY } from "../../utils/constants";
 import { containerVariants, itemVariants } from "./animations";
+import { useLocale } from "../../context/Locale";
 
 import styles from "./TodoList.module.scss";
 
-const formatDate = (date) => {
-  if (!date) return "Sin fecha";
+const formatDate = (date, locale, fallback) => {
+  if (!date) return fallback;
 
   const parsedDate = new Date(date);
-  if (Number.isNaN(parsedDate.getTime())) return "Sin fecha";
+  if (Number.isNaN(parsedDate.getTime())) return fallback;
 
-  return new Intl.DateTimeFormat("es-ES", {
+  return new Intl.DateTimeFormat(locale === "es" ? "es-ES" : "en-US", {
     day: "numeric",
     month: "short",
     year: parsedDate.getFullYear() !== new Date().getFullYear() ? "numeric" : undefined,
@@ -24,6 +25,7 @@ const formatDate = (date) => {
 
 const TodoList = () => {
   const editorRef = useRef(null);
+  const { locale, t } = useLocale();
   const [todoList, setTodoList] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [editorText, setEditorText] = useState("");
@@ -55,13 +57,13 @@ const TodoList = () => {
   }, [selectedId, isCreating]);
 
   const filteredTodos = useMemo(() => {
-    const normalizedQuery = searchQuery.trim().toLocaleLowerCase("es");
+    const normalizedQuery = searchQuery.trim().toLocaleLowerCase(locale);
     if (!normalizedQuery) return todoList;
 
     return todoList.filter((item) =>
-      item.title.toLocaleLowerCase("es").includes(normalizedQuery)
+      item.title.toLocaleLowerCase(locale).includes(normalizedQuery)
     );
-  }, [searchQuery, todoList]);
+  }, [locale, searchQuery, todoList]);
 
   const selectedTodo = todoList.find((item) => item.id === selectedId);
 
@@ -157,16 +159,16 @@ const TodoList = () => {
   const wordCount = editorText.trim() ? editorText.trim().split(/\s+/).length : 0;
 
   return (
-    <section className={styles.workspace} aria-label="Tus notas">
+    <section className={styles.workspace} aria-label={t.todo.workspaceLabel}>
       <aside className={`${styles.sidebar} ${hasEditor ? styles["sidebar-hidden-mobile"] : ""}`}>
         <div className={styles["sidebar-header"]}>
           <div>
-            <span className={styles.eyebrow}>TU ESPACIO</span>
-            <h1>Mis notitas</h1>
+            <span className={styles.eyebrow}>{t.todo.spaceEyebrow}</span>
+            <h1>{t.todo.title}</h1>
           </div>
           <button className={styles["new-note"]} onClick={beginNewNote} type="button">
             <span aria-hidden="true">+</span>
-            Nueva
+            {t.todo.new}
           </button>
         </div>
 
@@ -175,21 +177,21 @@ const TodoList = () => {
             <circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" strokeWidth="1.8" />
             <path d="m16 16 4 4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
           </svg>
-          <span className="sr-only">Buscar en tus notas</span>
+          <span className="sr-only">{t.todo.searchLabel}</span>
           <input
             value={searchQuery}
             onChange={(event) => setSearchQuery(event.target.value)}
-            placeholder="Buscar en tus notas"
+            placeholder={t.todo.searchPlaceholder}
             type="search"
           />
           {searchQuery ? (
-            <button type="button" onClick={() => setSearchQuery("")} aria-label="Limpiar búsqueda">×</button>
+            <button type="button" onClick={() => setSearchQuery("")} aria-label={t.todo.clearSearch}>×</button>
           ) : null}
         </label>
 
         <div className={styles["list-meta"]}>
-          <span>{filteredTodos.length} {filteredTodos.length === 1 ? "nota" : "notas"}</span>
-          <span>Solo en este navegador</span>
+          <span>{filteredTodos.length} {filteredTodos.length === 1 ? t.todo.note : t.todo.notes}</span>
+          <span>{t.todo.localOnly}</span>
         </div>
 
         <div className={styles["notes-scroll"]}>
@@ -210,9 +212,9 @@ const TodoList = () => {
           ) : (
             <div className={styles["empty-list"]}>
               <span aria-hidden="true">{searchQuery ? "⌕" : "✦"}</span>
-              <h2>{searchQuery ? "No hay coincidencias" : "Aquí empiezan tus ideas"}</h2>
-              <p>{searchQuery ? "Prueba con otras palabras." : "Crea una nota y la guardaremos solo en este navegador."}</p>
-              {!searchQuery ? <button type="button" onClick={beginNewNote}>Escribir mi primera nota</button> : null}
+              <h2>{searchQuery ? t.todo.noMatches : t.todo.ideasStart}</h2>
+              <p>{searchQuery ? t.todo.tryOtherWords : t.todo.emptyListDescription}</p>
+              {!searchQuery ? <button type="button" onClick={beginNewNote}>{t.todo.firstNote}</button> : null}
             </div>
           )}
         </div>
@@ -222,17 +224,17 @@ const TodoList = () => {
         {hasEditor ? (
           <motion.div className={styles["editor-shell"]} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
             <header className={styles["editor-header"]}>
-              <button className={styles["back-button"]} type="button" onClick={closeEditor} aria-label="Volver a la lista">
+              <button className={styles["back-button"]} type="button" onClick={closeEditor} aria-label={t.todo.backToList}>
                 <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20">
                   <path d="m15 18-6-6 6-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </button>
               <div>
-                <span className={styles["editor-kicker"]}>{isCreating ? "NUEVA NOTA" : "EDITANDO"}</span>
-                <p>{isCreating ? "Sin guardar" : `Actualizada ${formatDate(selectedTodo?.updatedAt || selectedTodo?.creationDate)}`}</p>
+                <span className={styles["editor-kicker"]}>{isCreating ? t.todo.newNote : t.todo.editing}</span>
+                <p>{isCreating ? t.todo.unsaved : `${t.todo.updated} ${formatDate(selectedTodo?.updatedAt || selectedTodo?.creationDate, locale, t.todo.noDate)}`}</p>
               </div>
               <button className={styles["save-button"]} type="button" onClick={saveNote}>
-                Guardar
+                {t.todo.save}
                 <span className={styles.shortcut}>⌘ ↵</span>
               </button>
             </header>
@@ -243,8 +245,8 @@ const TodoList = () => {
                 value={editorText}
                 onChange={(event) => setEditorText(event.target.value)}
                 onKeyDown={handleEditorKeyDown}
-                placeholder="Escribe sin pensar demasiado…"
-                aria-label="Contenido de la nota"
+                placeholder={t.todo.editorPlaceholder}
+                aria-label={t.todo.contentLabel}
               />
               <AnimatePresence>
                 {hasError ? <FormNoteError errorCount={errorCount} /> : null}
@@ -252,18 +254,18 @@ const TodoList = () => {
             </div>
 
             <footer className={styles["editor-footer"]}>
-              <span>{wordCount} {wordCount === 1 ? "palabra" : "palabras"} · {editorText.length} caracteres</span>
+              <span>{wordCount} {wordCount === 1 ? t.todo.word : t.todo.words} · {editorText.length} {t.todo.characters}</span>
               {!isCreating ? (
                 <div className={styles["delete-actions"]}>
                   {deleteArmed ? (
-                    <button type="button" className={styles.cancel} onClick={() => setDeleteArmed(false)}>Cancelar</button>
+                    <button type="button" className={styles.cancel} onClick={() => setDeleteArmed(false)}>{t.todo.cancel}</button>
                   ) : null}
                   <button
                     type="button"
                     className={`${styles.delete} ${deleteArmed ? styles["delete-confirm"] : ""}`}
                     onClick={removeSelectedNote}
                   >
-                    {deleteArmed ? "Sí, eliminar" : "Eliminar nota"}
+                    {deleteArmed ? t.todo.confirmDelete : t.todo.delete}
                   </button>
                 </div>
               ) : null}
@@ -272,10 +274,10 @@ const TodoList = () => {
         ) : (
           <div className={styles["editor-empty"]}>
             <div className={styles["empty-mark"]} aria-hidden="true">n.</div>
-            <span className={styles.eyebrow}>UN LUGAR PARA PENSAR</span>
-            <h2>Captura lo importante.<br />Encuéntralo sin esfuerzo.</h2>
-            <p>Selecciona una nota de la lista o empieza una nueva. Las notas largas se abren aquí, sin ocupar todo tu listado.</p>
-            <button type="button" onClick={beginNewNote}>Crear una nota <span aria-hidden="true">→</span></button>
+            <span className={styles.eyebrow}>{t.todo.emptyEditorEyebrow}</span>
+            <h2>{t.todo.emptyEditorTitle[0]}<br />{t.todo.emptyEditorTitle[1]}</h2>
+            <p>{t.todo.emptyEditorDescription}</p>
+            <button type="button" onClick={beginNewNote}>{t.todo.create} <span aria-hidden="true">→</span></button>
           </div>
         )}
       </main>
