@@ -24,16 +24,6 @@
 .hero-right {
   display: none;
 
-  // @include from('desktop') {
-  //   display: flex;
-  //   flex-direction: column;
-  //   justify-content: center;
-  //   align-items: flex-start;
-  //   flex-basis: 100%;
-  //   order: 1;
-  //   padding: 24px;
-  // }
-
   h1 {
     color: $purple;
     font-size: 36px;
@@ -51,29 +41,67 @@
     }
   }
 
-  @include from('tablet') {
+  @include from('laptop') {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     order: 2;
-    flex-basis: 50%;
+    flex-basis: 46%;
     align-items: center;
+    padding: 80px 48px 48px 0;
   }
 }
 
 .hero-image {
   display: none;
-  @include from('tablet') {
+
+  @include from('laptop') {
     display: block;
-    margin-top: 50px;
+    width: min(100%, 720px);
+
+    img {
+      border-radius: 16px;
+    }
+
+    p {
+      margin-top: 12px;
+      color: #696c75;
+      font-size: 13px;
+      text-align: right;
+    }
+  }
+}
+
+.controls {
+  position: fixed;
+  z-index: 10;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  @include from('tablet') {
+    right: 24px;
   }
 }
 
 .hiw-cta {
-  position: fixed;
-  top: 12px;
-  right: 24px;
+  padding: 8px 0;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  background: transparent;
+  color: inherit;
+  font-family: 'IBM Plex Sans', sans-serif;
   font-size: 12px;
   cursor: pointer;
   
   &:hover {
-    text-decoration: underline;
+    border-bottom-color: currentColor;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $blue;
+    outline-offset: 4px;
   }
 }

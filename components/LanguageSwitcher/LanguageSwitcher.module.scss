@@ -1,0 +1,54 @@
+@import '../../styles/color-palette.scss';
+
+.switcher {
+  display: grid;
+  grid-template-columns: repeat(2, 48px);
+  padding: 3px;
+  border: 1px solid #d9dce3;
+  background: #f7f7f8;
+  border-radius: 8px;
+}
+
+.option {
+  position: relative;
+  min-height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 5px;
+  color: #696c75;
+  background: transparent;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid $blue;
+    outline-offset: 3px;
+  }
+}
+
+.active {
+  color: white;
+}
+
+.indicator {
+  position: absolute;
+  inset: 0;
+  border-radius: 5px;
+  background: $blue;
+  box-shadow: 0 3px 10px rgba(20, 116, 237, 0.22);
+}
+
+.label {
+  position: relative;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .indicator {
+    transition: none;
+  }
+}
+

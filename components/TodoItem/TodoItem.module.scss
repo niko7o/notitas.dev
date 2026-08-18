@@ -43,16 +43,51 @@
   color: #ab865a;
   background-color: #ffc67f;
   flex-shrink: 0;
+  border: 0;
+
+  svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $blue;
+    outline-offset: 3px;
+  }
 }
 
 .edit {
-  font-size: 24px;
   margin-left: auto;
   margin-right: 16px;
+  padding: 6px;
+  border: 0;
+  background: transparent;
+  color: #444750;
   cursor: pointer;
 
   &:hover {
     opacity: 0.7;
+  }
+
+  svg {
+    display: block;
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $blue;
+    outline-offset: 3px;
   }
 }
 

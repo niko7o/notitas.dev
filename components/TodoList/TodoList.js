@@ -11,6 +11,7 @@ import { LOCAL_STORAGE_KEY } from "../../utils/constants";
 import { containerVariants, itemVariants } from "./animations";
 
 import { useFeatureFlags } from '../../hooks/useFeatureFlags';
+import { useLocale } from '../../context/Locale';
 
 import styles from "./TodoList.module.scss";
 
@@ -23,7 +24,8 @@ const TodoList = () => {
   const [errorCount, setErrorCount] = useState(0);
 
   const { flags: featureFlags = [] } = useFeatureFlags();
-  const isRedesign = featureFlags?.includes('redesign') || false;
+  const { t } = useLocale();
+  const isRedesign = featureFlags?.includes('redesign') || false;
 
   useEffect(() => {
     const localTodos = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -137,11 +139,12 @@ const TodoList = () => {
           <TextInput
             nodeRef={inputRef}
             onKeyPress={handleKeyPress}
-            placeholder='Escribe aquí..'
+            placeholder={t.todo.placeholder}
+            ariaLabel={t.todo.placeholder}
           />
           <Button 
             onClick={addTodoItem} 
-            title={isRedesign ? 'Añadir nota' : 'Añadir nota (Enter)'}
+            title={isRedesign ? t.todo.add : t.todo.addWithShortcut}
           />
           {hasError && <FormNoteError errorCount={errorCount} />}
         </motion.div>
