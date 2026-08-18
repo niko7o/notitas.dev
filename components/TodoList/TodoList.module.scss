@@ -23,8 +23,10 @@ $yellow: #f5c74f;
 
 .sidebar {
   min-width: 0;
+  min-height: 0;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   background: #f7f5ee;
   border-right: 1px solid $line;
 }
@@ -153,10 +155,11 @@ $yellow: #f5c74f;
 
 .notes-scroll {
   min-height: 0;
-  flex: 1;
+  flex: 1 1 0;
   padding: 0 12px 20px;
   overflow-y: auto;
   overscroll-behavior: contain;
+  scrollbar-gutter: stable;
   scrollbar-width: thin;
   scrollbar-color: #c7c5bc transparent;
 
